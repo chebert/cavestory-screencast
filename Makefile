@@ -1,4 +1,4 @@
 compile:
-	clang++ -o gen/cavestory src/**.cc -lSDL
+	clang++ -o gen/cavestory ./CaveStory/src/**.cc -lSDL
 run:
 	cd gen && ./cavestory

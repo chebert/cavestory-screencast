@@ -11,24 +11,24 @@
 
 namespace {
 // Walk Motion
-const float kWalkingAcceleration = 0.00083007812; // (pixels / ms) / ms
-const float kMaxSpeedX = 0.15859375; // pixels / ms
-const float kFriction = 0.00049804687; // (pixels / ms) / ms
+const float kWalkingAcceleration = Game::gameUnitsToPixels(0.00083007812f); // (pixels / ms) / ms
+const float kMaxSpeedX = Game::gameUnitsToPixels(0.15859375f); // pixels / ms
+const float kFriction = Game::gameUnitsToPixels(0.00049804687f); // (pixels / ms) / ms
 
 // Fall Motion
-const float kGravity = 0.00078125; // (pixels / ms) / ms
-const float kMaxSpeedY = 0.2998046875; // pixels / ms
+const float kGravity = Game::gameUnitsToPixels(0.00078125f); // (pixels / ms) / ms
+const float kMaxSpeedY = Game::gameUnitsToPixels(0.2998046875f); // pixels / ms
 
 // Jump Motion
-const float kJumpSpeed = 0.25f; // pixels / ms
-const float kAirAcceleration = 0.0003125f; // pixels / ms / ms
-const float kJumpGravity = 0.0003125f; // pixels / ms / ms
+const float kJumpSpeed = Game::gameUnitsToPixels(0.25f); // pixels / ms
+const float kAirAcceleration = Game::gameUnitsToPixels(0.0003125f); // pixels / ms / ms
+const float kJumpGravity = Game::gameUnitsToPixels(0.0003125f); // pixels / ms / ms
 
 // Sprites
 const std::string kSpriteFilePath("../content/MyChar.bmp");
 
 // Sprite Frames
-const int kCharacterFrame = 8;
+const int kCharacterFrame = 0;
 
 const int kWalkFrame = 0;
 const int kStandFrame = 0;
@@ -43,8 +43,14 @@ const int kNumWalkFrames = 3;
 const int kWalkFps = 15;
 
 // Collision Rectangle
-const Rectangle kCollisionX(6, 10, 20, 12);
-const Rectangle kCollisionY(10, 2, 12, 30);
+const Rectangle kCollisionX(Game::gameUnitsToPixels(6),
+                            Game::gameUnitsToPixels(10),
+                            Game::gameUnitsToPixels(20),
+                            Game::gameUnitsToPixels(12));
+const Rectangle kCollisionY(Game::gameUnitsToPixels(10),
+                            Game::gameUnitsToPixels(2),
+                            Game::gameUnitsToPixels(12),
+                            Game::gameUnitsToPixels(30));
 
 struct CollisionInfo {
    bool collided;
@@ -55,7 +61,9 @@ CollisionInfo getWallCollisionInfo(const Map& map, const Rectangle& rectangle) {
    std::vector<Map::CollisionTile> tiles(map.getCollidingTiles(rectangle));
    for (size_t i = 0; i < tiles.size(); ++i) {
       if (tiles[i].tile_type == Map::WALL_TILE) {
-         info = { true, tiles[i].row, tiles[i].col };
+         info.collided = true;
+         info.row = tiles[i].row;
+         info.col = tiles[i].col;
          break;
       }
    }
@@ -119,6 +127,7 @@ void Player::stopMoving() {
 }
 
 void Player::lookUp() {
+   interacting_ = false;
    vertical_facing_ = UP;
    interacting_ = false;
 }
@@ -141,6 +150,7 @@ void Player::startJump() {
       velocity_y_ = -kJumpSpeed;
    // else if we are mid jump
    }
+   interacting_ = false;
 }
 
 void Player::stopJump() {
@@ -154,7 +164,7 @@ void Player::initializeSprites(Graphics& graphics) {
       for (int h_facing = FIRST_HORIZONTAL_FACING;
                h_facing < LAST_HORIZONTAL_FACING;
                ++h_facing) {
-		   for (int v_facing = FIRST_VERTICAL_FACING;
+         for (int v_facing = FIRST_VERTICAL_FACING;
                   v_facing < LAST_VERTICAL_FACING;
                   ++v_facing) {
             initializeSprite(graphics, SpriteState((MotionType)motion,

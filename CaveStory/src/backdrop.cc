@@ -5,7 +5,7 @@
 #include "game.h"
 
 namespace {
-const int kBackgroundSize = 128; // pixels
+const int kBackgroundSize = Game::kTileSize * 4; // pixels
 }
 
 FixedBackdrop::FixedBackdrop(const std::string& path, Graphics& graphics) {
