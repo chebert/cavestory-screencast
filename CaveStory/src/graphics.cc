@@ -10,8 +10,8 @@ const int kBitsPerPixel = 32;
 
 Graphics::Graphics() {
    screen_ = SDL_SetVideoMode(
-         Game::kScreenWidth,
-         Game::kScreenHeight,
+         units::tileToPixel(Game::kScreenWidth),
+         units::tileToPixel(Game::kScreenHeight),
          kBitsPerPixel,
          0);
    SDL_ShowCursor(SDL_DISABLE);
