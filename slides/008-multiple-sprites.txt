@@ -1,0 +1,14 @@
+Episode 8 - Multiple Sprites
+============================
+
+Problem:
+ - Quote needs to be able to switch between sprites,
+   based on his state.
+
+Solution/Implementation:
+ - Introduce a map from state -> sprites.
+ - our 'SpriteState' will need to know:
+     1) Are we walking?
+     2) Are we facing left/right?
+ - we will use a std::map, means we need an 'operator<' definition for our
+   keys.

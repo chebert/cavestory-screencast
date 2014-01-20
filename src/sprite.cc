@@ -14,10 +14,6 @@ Sprite::Sprite(
    source_rect_.h = height;
 }
 
-Sprite::~Sprite() {
-   SDL_FreeSurface(sprite_sheet_);
-}
-
 void Sprite::draw(Graphics& graphics, int x, int y) {
    SDL_Rect destination_rectangle;
    destination_rectangle.x = x;
