@@ -1,0 +1,29 @@
+Episode 3 - Static Sprite
+=========================
+
+Problem:
+ - How do we draw Quote on the screen?
+
+Plan of attack:
+ - Load the sprite sheet: SDL_LoadBMP
+ - Draw the sprite: SDL_BlitSurface
+
+SDL_Surface* SDL_LoadBMP(const char* file);
+
+int SDL_BlitSurface(
+   SDL_Surface* source, SDL_Rect* source_rectangle,
+   SDL_Surface* destination, SDL_Rect* destination_rectangle);
+SDL_Rect {
+   Sint16 x, y;
+   Uint16 w, h;
+}
+
+
+
+
+For us:
+source = The loaded spritesheet.
+source_rectangle = The portion we want to draw. x=0,y=0,w=32,h=32
+
+destination = The screen.
+destination_rectangle = where to draw on the screen. (Ignores width/height).
