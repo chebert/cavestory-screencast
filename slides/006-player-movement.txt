@@ -5,7 +5,7 @@ Problem:
  - Quotes needs to walk left/right.
 
 Details:
- - Cave Story uses ←↑→↓ for movement
+ - Cave Story uses ← and → for movement
 
  - When ← is pushed,
      1 - Quote faces left
@@ -32,16 +32,15 @@ Solution:
    - no movements will take place in the input-handling methods
    - update, draw
 
- Equations for walking (from physics):
-   - x = x + velocity_x * time + (1/2) * acceleration_x * time^2
-      - acceleration is negligible, so we will ignore it in this equation.
-   - velocity_x = velocity_x + acceleration_x * time
-      - but remember that we also have a max horizontal speed
+ Equations for walking (paraphrased, from physics):
+   - x += velocity_x * time
+   - velocity_x += acceleration_x * time
 
    - acceleration_x varies based on Quote's state.
       - Walking Left:  acceleration_x = -walking_acceleration
       - Walking Right: acceleration_x = walking_acceleration
 
    - velocity_x also varies based on Quote's State.
-      - Walking (already given): vx += ax * time
-      - Standing: velocity_x = velocity_x / slowdown_constant (around 1.2)
+      - Walking: (already given)
+      - Standing: (not from physics)
+         velocity_x = velocity_x / slowdown_constant (around 1.2)

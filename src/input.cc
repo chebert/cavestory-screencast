@@ -16,13 +16,13 @@ void Input::keyUpEvent(const SDL_Event& event) {
 }
 
 bool Input::wasKeyPressed(SDLKey key) {
-   pressed_keys_[key];
+   return pressed_keys_[key];
 }
 
 bool Input::wasKeyReleased(SDLKey key) {
-   released_keys_[key];
+   return released_keys_[key];
 }
 
 bool Input::isKeyHeld(SDLKey key) {
-   held_keys_[key];
+   return held_keys_[key];
 }
