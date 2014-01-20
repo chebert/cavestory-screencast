@@ -43,6 +43,7 @@ struct Map {
       boost::shared_ptr<Sprite> sprite;
    };
    boost::scoped_ptr<Backdrop> backdrop_;
+   std::vector<std::vector<boost::shared_ptr<Sprite> > > background_tiles_;
    std::vector<std::vector<Tile> > tiles_;
 };
 
