@@ -12,7 +12,11 @@ const int kFps = 60;
 }
 
 //static
-int Game::kTileSize = 32;
+int Game::kTileSize = 16;
+//static
+int Game::kScreenWidth = 20 * Game::kTileSize;
+//static
+int Game::kScreenHeight = 15 * Game::kTileSize;
 
 Game::Game() {
    SDL_Init(SDL_INIT_EVERYTHING);
@@ -28,7 +32,7 @@ void Game::eventLoop() {
    Input input;
    SDL_Event event;
 
-   player_.reset(new Player(graphics, 320, 240));
+   player_.reset(new Player(graphics, kScreenWidth / 2, kScreenHeight / 2));
    map_.reset(Map::createTestMap(graphics));
 
    bool running = true;
@@ -102,6 +106,7 @@ void Game::update(int elapsed_time_ms) {
 
 void Game::draw(Graphics& graphics) {
    graphics.clear();
+   map_->drawBackground(graphics);
    player_->draw(graphics);
    map_->draw(graphics);
    graphics.flip();

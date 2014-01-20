@@ -1,0 +1,16 @@
+Episode 18 - High Precision Position
+====================================
+
+Problem:
+ - Switching to 320x240 showed us that our position's precision was too low
+
+Solution:
+ - Change our int x_, y_ to floats.
+	- Key concept: When do we round?
+
+Bonus Bug Fix!
+Problem:
+ - the drag-window bug!
+Solution:
+ - pause our "timer" whenever we don't have mouse in view?
+ - put a maximum on our elapsed_time_ms?
