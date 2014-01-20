@@ -6,6 +6,7 @@ Thus far we have been working with 32x32 sprites and 640x480 screen.
 Problem:
  - The original Cave Story uses 16x16 sprites and 320x240 screen size.
  - I can't legally provide you with all of the media content, so you need to get it from the game yourself.
+ - NIKALIS' Cave Story+
 
 Solution:
  - .pbm files are really .bmp files with a (C)Pixel appended.
