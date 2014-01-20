@@ -3,6 +3,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
+struct Map;
 struct Player;
 struct Graphics;
 
@@ -17,6 +18,7 @@ struct Game {
    void draw(Graphics& graphics);
 
    boost::scoped_ptr<Player> player_;
+   boost::scoped_ptr<Map> map_;
 };
 
 #endif // GAME_H_
