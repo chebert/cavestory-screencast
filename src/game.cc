@@ -28,7 +28,7 @@ void Game::eventLoop() {
    Input input;
    SDL_Event event;
 
-   player_.reset(new Player(320, 240));
+   player_.reset(new Player(graphics, 320, 240));
 
    bool running = true;
    int last_update_time = SDL_GetTicks();
