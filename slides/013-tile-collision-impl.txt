@@ -1,0 +1,39 @@
+Episode 13 - Tile Collision Implementation
+==========================================
+
+Problem:
+ - Tile collisions
+ - See Episode 12 for a detailed explanation
+
+Implementation:
+ - Map Class
+    - Map.foreground_sprites_ becomes Map.tiles_
+    - Tile
+      - Sprite
+      - TileType
+         - AIR_TILE
+         - WALL_TILE
+
+    - How do we know if our rectangle is colliding?
+      - Map.getCollidingTiles()
+         - returns vector<CollisionTile>
+      - CollisionTile
+         - row, col
+         - TileType
+
+      - Find all colliding tiles
+         - first row = top() / tileSize (truncating)
+         - last row = bottom() / tileSize (truncating)
+         - first col = left() / tileSize (truncating)
+         - last col = right() / tileSize (truncating)
+
+ - Player Class
+   - Create our X-Collision Rectangle and Y-Collision Rectangle
+   - Functions to create our left/right/top/bottom rectangles (based on deltas)
+   - for each axis:
+      - update velocity
+      - calculate delta
+      - check collision in direction of delta
+         - react to collision
+      - check collision in other direction
+         - update position

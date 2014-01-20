@@ -4,6 +4,8 @@
 #include "game.h"
 #include "animated_sprite.h"
 #include "graphics.h"
+#include "map.h"
+#include "rectangle.h"
 
 #include <cmath>
 
@@ -22,10 +24,10 @@ const float kJumpSpeed = 0.325f; // pixels / ms
 const int kJumpTime = 275; // ms
 
 // Sprites
-const std::string kSpriteFilePath("content/MyChar.bmp");
+const std::string kSpriteFilePath("../content/MyChar.bmp");
 
 // Sprite Frames
-const int kCharacterFrame = 16;
+const int kCharacterFrame = 8;
 
 const int kWalkFrame = 0;
 const int kStandFrame = 0;
@@ -38,6 +40,28 @@ const int kBackFrame = 7;
 // Walk Animation
 const int kNumWalkFrames = 3;
 const int kWalkFps = 15;
+
+// Collision Rectangle
+const Rectangle kCollisionX(6, 10, 20, 12);
+const Rectangle kCollisionY(10, 2, 12, 30);
+
+struct CollisionInfo {
+   bool collided;
+   int row, col;
+};
+CollisionInfo getWallCollisionInfo(const Map& map, const Rectangle& rectangle) {
+   CollisionInfo info = { false, 0, 0 };
+   std::vector<Map::CollisionTile> tiles(map.getCollidingTiles(rectangle));
+   for (size_t i = 0; i < tiles.size(); ++i) {
+      if (tiles[i].tile_type == Map::WALL_TILE) {
+         info.collided = true;
+         info.row = tiles[i].row;
+         info.col = tiles[i].col;
+         break;
+      }
+   }
+   return info;
+}
 }
 
 bool operator<(const Player::SpriteState& a, const Player::SpriteState& b) {
@@ -66,33 +90,12 @@ Player::Player(Graphics& graphics, int x, int y) :
    initializeSprites(graphics);
 }
 
-void Player::update(int elapsed_time_ms) {
+void Player::update(int elapsed_time_ms, const Map& map) {
    sprites_[getSpriteState()]->update(elapsed_time_ms);
    jump_.update(elapsed_time_ms);
 
-   x_ += round(velocity_x_ * elapsed_time_ms);
-   velocity_x_ += acceleration_x_ * elapsed_time_ms;
-   if (acceleration_x_ < 0.0f) {
-      velocity_x_ = std::max(velocity_x_, -kMaxSpeedX);
-   } else if (acceleration_x_ > 0.0f) {
-      velocity_x_ = std::min(velocity_x_, kMaxSpeedX);
-   } else if (on_ground()) {
-      velocity_x_ *= kSlowdownFactor;
-   }
-
-   y_ += round(velocity_y_ * elapsed_time_ms);
-   if (!jump_.active()) {
-      velocity_y_ = std::min(velocity_y_ + kGravity * elapsed_time_ms,
-                             kMaxSpeedY);
-   }
-
-   // TODO: remove this hack
-   if (y_ >= 320) {
-      y_ = 320;
-      velocity_y_ = 0.0f;
-   }
-   on_ground_ = y_ == 320;
-   // TODO: remove this hack
+   updateX(elapsed_time_ms, map);
+   updateY(elapsed_time_ms, map);
 }
 
 void Player::draw(Graphics& graphics) {
@@ -141,18 +144,18 @@ void Player::stopJump() {
 }
 
 void Player::initializeSprites(Graphics& graphics) {
-   for (MotionType motion_type = FIRST_MOTION_TYPE;
-        motion_type < LAST_MOTION_TYPE;
-        ++motion_type) {
-      for (HorizontalFacing horizontal_facing = FIRST_HORIZONTAL_FACING;
-           horizontal_facing < LAST_HORIZONTAL_FACING;
-           ++horizontal_facing) {
-         for (VerticalFacing vertical_facing = FIRST_VERTICAL_FACING;
-              vertical_facing < LAST_VERTICAL_FACING;
-              ++vertical_facing) {
-            initializeSprite(graphics, SpriteState(motion_type,
-                                                   horizontal_facing,
-                                                   vertical_facing));
+   for (int motion = FIRST_MOTION_TYPE;
+            motion < LAST_MOTION_TYPE;
+            ++motion) {
+      for (int h_facing = FIRST_HORIZONTAL_FACING;
+               h_facing < LAST_HORIZONTAL_FACING;
+               ++h_facing) {
+		   for (int v_facing = FIRST_VERTICAL_FACING;
+                  v_facing < LAST_VERTICAL_FACING;
+                  ++v_facing) {
+            initializeSprite(graphics, SpriteState((MotionType)motion,
+                                                   (HorizontalFacing)h_facing,
+                                                   (VerticalFacing)v_facing));
          }
       }
    }
@@ -232,6 +235,144 @@ void Player::Jump::update(int elapsed_time_ms) {
       time_remaining_ms_ -= elapsed_time_ms;
       if (time_remaining_ms_ <= 0) {
          active_ = false;
+      }
+   }
+}
+
+Rectangle Player::leftCollision(int delta) const {
+   assert(delta <= 0);
+   return Rectangle(
+      x_ + kCollisionX.left() + delta,
+      y_ + kCollisionX.top(),
+      kCollisionX.width() / 2 - delta,
+      kCollisionX.height()
+      );
+}
+
+Rectangle Player::rightCollision(int delta) const {
+   assert(delta >= 0);
+   return Rectangle(
+      x_ + kCollisionX.left() + kCollisionX.width() / 2,
+      y_ + kCollisionX.top(),
+      kCollisionX.width() / 2 + delta,
+      kCollisionX.height()
+      );
+}
+
+Rectangle Player::topCollision(int delta) const {
+   assert(delta <= 0);
+   return Rectangle(
+      x_ + kCollisionY.left(),
+      y_ + kCollisionY.top() + delta,
+      kCollisionY.width(),
+      kCollisionY.height() / 2 - delta
+      );
+}
+
+Rectangle Player::bottomCollision(int delta) const {
+   assert(delta >= 0);
+   return Rectangle(
+      x_ + kCollisionY.left(),
+      y_ + kCollisionY.top() + kCollisionY.height() / 2,
+      kCollisionY.width(),
+      kCollisionY.height() / 2 + delta
+      );
+}
+
+void Player::updateX(int elapsed_time_ms, const Map& map) {
+   // Update Velocity
+   velocity_x_ += acceleration_x_ * elapsed_time_ms;
+   if (acceleration_x_ < 0.0f) {
+      velocity_x_ = std::max(velocity_x_, -kMaxSpeedX);
+   }
+   else if (acceleration_x_ > 0.0f) {
+      velocity_x_ = std::min(velocity_x_, kMaxSpeedX);
+   }
+   else if (on_ground()) {
+      velocity_x_ *= kSlowdownFactor;
+   }
+
+   // Calculate delta
+   const int delta = (int)round(velocity_x_ * elapsed_time_ms); 
+   if (delta > 0) {
+      // Check collision in the direction of delta.
+      CollisionInfo info = getWallCollisionInfo(map, rightCollision(delta));
+      // React to collision
+      if (info.collided) {
+         x_ = info.col * Game::kTileSize - kCollisionX.right();
+         velocity_x_ = 0.0f;
+      } else {
+         x_ += delta;
+      }
+
+      // Check collision in other direction.
+      info = getWallCollisionInfo(map, leftCollision(0));
+      if (info.collided) {
+         x_ = info.col * Game::kTileSize + kCollisionX.right();
+      }
+   } else {
+      // Check collision in the direction of delta.
+      CollisionInfo info = getWallCollisionInfo(map, leftCollision(delta));
+      // React to collision
+      if (info.collided) {
+         x_ = info.col * Game::kTileSize + kCollisionX.right();
+         velocity_x_ = 0.0f;
+      } else {
+         x_ += delta;
+      }
+
+      // Check collision in other direction.
+      info = getWallCollisionInfo(map, rightCollision(0));
+      if (info.collided) {
+         x_ = info.col * Game::kTileSize - kCollisionX.right();
+      }
+   }
+
+}
+
+void Player::updateY(int elapsed_time_ms, const Map& map) {
+   // Update Velocity
+   if (!jump_.active()) {
+      velocity_y_ = std::min(velocity_y_ + kGravity * elapsed_time_ms,
+         kMaxSpeedY);
+   }
+   // Calculate delta
+   const int delta = (int)round(velocity_y_ * elapsed_time_ms);
+   if (delta > 0) {
+      // Check collision in the direction of delta.
+      CollisionInfo info = getWallCollisionInfo(map, bottomCollision(delta));
+      // React to collision
+      if (info.collided) {
+         y_ = info.row * Game::kTileSize - kCollisionY.bottom();
+         velocity_y_ = 0.0f;
+         on_ground_ = true;
+      } else {
+         y_ += delta;
+         on_ground_ = false;
+      }
+
+      // Check collision in other direction.
+      info = getWallCollisionInfo(map, topCollision(0));
+      if (info.collided) {
+         y_ = info.row * Game::kTileSize + kCollisionY.height();
+      }
+   } else {
+      CollisionInfo info = getWallCollisionInfo(map, topCollision(delta));
+      // React to collision
+      if (info.collided) {
+         y_ = info.row * Game::kTileSize + kCollisionY.height();
+         velocity_y_ = 0.0f;
+      }
+      else {
+         y_ += delta;
+         on_ground_ = false;
+      }
+
+      // Check collision in other direction.
+      info = getWallCollisionInfo(map, bottomCollision(0));
+      if (info.collided) {
+         y_ = info.row * Game::kTileSize - kCollisionY.bottom();
+         on_ground_ = true;
       }
    }
 }
