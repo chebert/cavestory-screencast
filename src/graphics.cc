@@ -17,6 +17,11 @@ Graphics::Graphics() {
 }
 
 Graphics::~Graphics() {
+   for (SpriteMap::iterator iter = sprite_sheets_.begin();
+        iter != sprite_sheets_.end();
+        ++iter) {
+      SDL_FreeSurface(iter->second);
+   }
    SDL_FreeSurface(screen_);
 }
 
