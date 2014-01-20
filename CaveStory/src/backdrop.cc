@@ -5,7 +5,7 @@
 #include "game.h"
 
 namespace {
-const int kBackgroundSize = Game::kTileSize * 4; // pixels
+const units::Tile kBackgroundSize = 4;
 }
 
 FixedBackdrop::FixedBackdrop(const std::string& path, Graphics& graphics) {
@@ -13,11 +13,11 @@ FixedBackdrop::FixedBackdrop(const std::string& path, Graphics& graphics) {
 }
 
 void FixedBackdrop::draw(Graphics& graphics) const {
-   for (int x = 0; x < Game::kScreenWidth; x += kBackgroundSize) {
-      for (int y = 0; y < Game::kScreenHeight; y += kBackgroundSize) {
+   for (units::Tile x = 0; x < Game::kScreenWidth; x += kBackgroundSize) {
+      for (units::Tile y = 0; y < Game::kScreenHeight; y += kBackgroundSize) {
          SDL_Rect destination_rectangle;
-         destination_rectangle.x = x;
-         destination_rectangle.y = y;
+         destination_rectangle.x = units::tileToPixel(x);
+         destination_rectangle.y = units::tileToPixel(y);
          graphics.blitSurface(surface_id_, NULL, &destination_rectangle);
       }
    }

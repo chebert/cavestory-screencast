@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "backdrop.h"
+#include "units.h"
 
 struct Graphics;
 struct Sprite;
@@ -17,18 +18,18 @@ struct Map {
       WALL_TILE
    };
    struct CollisionTile {
-      CollisionTile(int row, int col, TileType tile_type) :
+      CollisionTile(units::Tile row, units::Tile col, TileType tile_type) :
          row(row),
          col(col),
          tile_type(tile_type) {}
-      int row, col;
+      units::Tile row, col;
       TileType tile_type;
    };
    static Map* createTestMap(Graphics& graphics);
 
    std::vector<CollisionTile> getCollidingTiles(const Rectangle& rectangle) const;
 
-   void update(int elapsed_time_ms);
+   void update(units::MS elapsed_time_ms);
    void drawBackground(Graphics& graphics) const;
    void draw(Graphics& graphics) const;
 

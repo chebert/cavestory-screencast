@@ -6,14 +6,15 @@
 
 #include "sprite.h"
 #include "rectangle.h"
+#include "units.h"
 
 struct Graphics;
 struct Map;
 
 struct Player {
-   Player(Graphics& graphics, int x, int y);
+   Player(Graphics& graphics, units::Game x, units::Game y);
 
-   void update(int elapsed_time_ms, const Map& map);
+   void update(units::MS elapsed_time_ms, const Map& map);
    void draw(Graphics& graphics);
 
    void startMovingLeft();
@@ -69,19 +70,19 @@ struct Player {
    void initializeSprite(Graphics& graphics, const SpriteState& sprite_state);
    SpriteState getSpriteState();
 
-   Rectangle leftCollision(int delta) const;
-   Rectangle rightCollision(int delta) const;
+   Rectangle leftCollision(units::Game delta) const;
+   Rectangle rightCollision(units::Game delta) const;
 
-   Rectangle topCollision(int delta) const;
-   Rectangle bottomCollision(int delta) const;
+   Rectangle topCollision(units::Game delta) const;
+   Rectangle bottomCollision(units::Game delta) const;
 
-   void updateX(int elapsed_time_ms, const Map& map);
-   void updateY(int elapsed_time_ms, const Map& map);
+   void updateX(units::MS elapsed_time_ms, const Map& map);
+   void updateY(units::MS elapsed_time_ms, const Map& map);
 
    bool on_ground() const { return on_ground_; }
 
-   int x_, y_;
-   float velocity_x_, velocity_y_;
+   units::Game x_, y_;
+   units::Velocity velocity_x_, velocity_y_;
    int acceleration_x_;
    HorizontalFacing horizontal_facing_;
    VerticalFacing vertical_facing_;

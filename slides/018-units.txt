@@ -1,0 +1,72 @@
+Episode 18 - Units
+==================
+
+Units!
+ - Spacial
+    - Game (intrinsic)
+      - when 32x32 -> 1 Game == 1 Pixel
+      - when 16x16 -> 1 Game == 2 Pixels
+    - Pixels
+    - Tile
+      - 1 Tile == 32 Game
+
+ - Time:
+    - Hz (1 / Seconds)
+    - Milliseconds
+
+ - Combination:
+    - Game / ms
+    - Game / ms / ms
+
+What C++ types are we using now?
+ - float
+ - int
+ - unsigned int
+
+So our current mapping is:
+
+C++ Type         -> Units
+=========================
+float            -> Game
+int              -> Pixels
+int/unsigned int -> Tile
+
+float            -> Game / ms
+float            -> Game / ms / ms
+
+int              -> Hz (1 / Seconds)
+int              -> Milliseconds
+
+Really it's the game/pixel/tile that are easy to get wrong. By labelling our
+units, we make our job of figuring out when/how to convert easier.
+
+Let's give ourselves some more types to work with.
+
+New mapping:
+
+C++ Type     -> Units
+=====================
+units::Game  -> Game
+units::Pixel -> Pixels
+units::Tile  -> Tile
+
+units::Velocity     -> Game / ms
+units::Acceleration -> Game / ms / ms
+
+units::MS  -> Milliseconds
+units::FPS -> Hz (1 / Seconds)
+
+Goals:
+   1) No more rounding - use conversion functions
+   2) No Game::kTileSize - use conversion functions
+   3) Assign primitives to units as early as possible
+   4) Wait until the last moment to convert - using conversion functions
+   5) No more ints
+   6) No more floats
+
+Implementation:
+   1) units::MS/units::FPS/units::Velocity/units::Acceleration are all easy.
+      start with those.
+   2) relabel the other three, converting where necessary
+	   - Start with utility classes: Sprite, Rectangle
+	   - game, player
