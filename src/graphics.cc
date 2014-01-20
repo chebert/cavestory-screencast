@@ -13,7 +13,7 @@ Graphics::Graphics() {
          kScreenWidth,
          kScreenHeight,
          kBitsPerPixel,
-         SDL_FULLSCREEN);
+         0);
 }
 
 Graphics::~Graphics() {
