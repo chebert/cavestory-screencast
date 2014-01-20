@@ -3,11 +3,12 @@
 #include "game.h"
 
 AnimatedSprite::AnimatedSprite(
+      Graphics& graphics,
       const std::string& file_path,
       int source_x, int source_y,
       int width, int height,
       int fps, int num_frames) :
-   Sprite(file_path, source_x, source_y, width, height),
+   Sprite(graphics, file_path, source_x, source_y, width, height),
    frame_time_(1000 / fps),
    num_frames_(num_frames),
    current_frame_(0),

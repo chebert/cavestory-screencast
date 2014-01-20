@@ -1,0 +1,14 @@
+Episode 7 - Spritesheet Cache
+=============================
+
+Problem:
+ - Many sprites use one spritesheet (stand. walk left. walk right. etc.)
+ - Loading the same spritesheet over and over again.
+
+Solution:
+ - Create a cache of the spritesheets (in CPU memory).
+ - Sprites will no longer have 'control' of SDL_Surfaces,
+    - Don't create, don't delete.
+    - To show this, we will use:  typedef SDL_Surface* SurfaceID
+ - We will store SDL_Surfaces in the Graphics class.
+ - std::map<std::string, SDL_Surface*> sprite_sheets
