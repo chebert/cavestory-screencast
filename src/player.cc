@@ -25,7 +25,7 @@ const int kJumpTime = 275; // ms
 const std::string kSpriteFilePath("content/MyChar.bmp");
 
 // Sprite Frames
-const int kCharacterFrame = 0;
+const int kCharacterFrame = 16;
 
 const int kWalkFrame = 0;
 const int kStandFrame = 0;

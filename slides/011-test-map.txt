@@ -1,0 +1,22 @@
+Episode 11 - Creating a Test Map
+================================
+
+A couple of cleanups in this episode:
+ - Important:
+   - SDL_Delay(ms_per_frame - elapsed_time_ms/*ms*/);
+   - what if elapsed_time_ms is greater than 1000/kFps?
+ - Trivial:
+   - moving SDL_ShowCursor to the graphics class
+
+Problem:
+ - We want to have a map of walls to run into/jump on/jump off of.
+
+Implementation:
+ - Create the test map before the event loop
+
+ - Map class to hold (for now):
+   - Foreground Sprites - as a vector of vectors
+   - CollisionMap - as a CollisionMap Object
+
+ - CollisionMap to hold (for now):
+   - CollisionRectangles - a list
