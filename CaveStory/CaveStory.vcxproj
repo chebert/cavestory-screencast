@@ -72,6 +72,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\animated_sprite.cc" />
+    <ClCompile Include="src\backdrop.cc" />
     <ClCompile Include="src\game.cc" />
     <ClCompile Include="src\graphics.cc" />
     <ClCompile Include="src\input.cc" />
@@ -82,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\animated_sprite.h" />
+    <ClInclude Include="src\backdrop.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\graphics.h" />
     <ClInclude Include="src\input.h" />

@@ -39,6 +39,9 @@
     <ClCompile Include="src\sprite.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\backdrop.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\animated_sprite.h">
@@ -63,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\rectangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\backdrop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
