@@ -1,0 +1,20 @@
+Episode 15 - Introducing the Background
+=======================================
+
+Problem:
+ - I'm tired of staring at a black background
+ - Quote is actually drawing black pixels to the screen.
+
+Solution:
+ - Layers!
+	- Foreground layer: wall tiles, water tiles
+	- Entity layer(s): Quote, enemies, doors
+	- Background layer: background tiles, chain tiles, 
+	- Backdrop: stuff in the distant background. Sometimes solid color, sometimes cave texture
+		- Fixed position
+		- Parallax/other
+ - Draw a backdrop
+ - Draw background tiles
+ - SDL_SetColorKey(SDL_Surface*, Uint32 flag, Uint32 color)
+	- choose a color to make transparent
+	- Pixel chose for us. It's black.

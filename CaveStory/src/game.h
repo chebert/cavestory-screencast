@@ -12,6 +12,8 @@ struct Game {
    ~Game();
 
    static int kTileSize;
+   static int kScreenWidth;
+   static int kScreenHeight;
   private:
    void eventLoop();
    void update(int elapsed_time_ms);

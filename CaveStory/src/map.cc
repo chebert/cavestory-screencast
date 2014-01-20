@@ -12,6 +12,7 @@ using std::vector;
 Map* Map::createTestMap(Graphics& graphics) {
    Map* map = new Map();
 
+   map->backdrop_.reset(new FixedBackdrop("../content/bkBlue.bmp", graphics));
    const int num_rows = 15;
    const int num_cols = 20;
    // Ensure foreground_sprites_ is num_rows x num_cols in size
@@ -61,6 +62,10 @@ void Map::update(int elapsed_time_ms) {
          }
       }
    }
+}
+
+void Map::drawBackground(Graphics& graphics) const {
+   backdrop_->draw(graphics);
 }
 
 void Map::draw(Graphics& graphics) const {
