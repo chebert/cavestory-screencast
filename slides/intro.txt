@@ -1,0 +1,32 @@
+Welcome to Re-constructing Cave Story
+=====================================
+
+What is Cave Story?
+ - an action-platformer in the vein of Megaman
+ - game made by Pixel on his off-time in 5 years
+
+What this isn't:
+ - a deconstruction of Pixel's code
+ - art/music/asset creation walkthrough
+ - a tutorial on the C++ language, or C++ language constructs
+
+What this is:
+ - a journey to re-construct Cave Story
+ - an intermediate level learning experience for C++
+ - a look at building a detailed game engine
+
+Why do this?
+ - full-detail game engines are very complex
+ - help people appreciate how awesome Cave Story is!
+
+
+
+What we'll need:
+================
+
+This Episode:
+SDL v1.2
+
+Later Episodes:
+boost v1.48
+Gorilla Audio

@@ -1,0 +1,8 @@
+Episode 2 - Test The Event Loop
+===============================
+
+Problem:
+ - How do we know the event loop runs at 60 fps?
+
+Solution:
+ - Test it out!
