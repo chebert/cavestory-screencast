@@ -1,0 +1,16 @@
+Episode 20 - Every Cave Needs a Bat
+===================================
+
+Problem:
+ - Let's add our first enemy.
+
+Goals:
+ - Bat that flies up and down
+ - looks at the player
+
+Not Goals (for this episode):
+ - collision
+ - damage
+
+Implementation:
+ - One class per enemy.
