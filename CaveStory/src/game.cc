@@ -6,6 +6,7 @@
 #include "map.h"
 #include "player.h"
 #include "input.h"
+#include "first_cave_bat.h"
 
 namespace {
 const units::FPS kFps = 60;
@@ -32,6 +33,7 @@ void Game::eventLoop() {
    SDL_Event event;
 
    player_.reset(new Player(graphics, units::tileToGame(kScreenWidth / 2), units::tileToGame(kScreenHeight / 2)));
+   bat_.reset(new FirstCaveBat(graphics, units::tileToGame(5), units::tileToGame(kScreenHeight / 2)));
    map_.reset(Map::createTestMap(graphics));
 
    bool running = true;
@@ -101,12 +103,15 @@ void Game::eventLoop() {
 
 void Game::update(units::MS elapsed_time_ms) {
    player_->update(elapsed_time_ms, *map_);
+
+   bat_->update(elapsed_time_ms, player_->center_x());
    map_->update(elapsed_time_ms);
 }
 
 void Game::draw(Graphics& graphics) {
    graphics.clear();
    map_->drawBackground(graphics);
+   bat_->draw(graphics);
    player_->draw(graphics);
    map_->draw(graphics);
    graphics.flip();
