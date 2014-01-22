@@ -153,6 +153,13 @@ void Player::stopJump() {
    jump_active_ = false;
 }
 
+Rectangle Player::damageRectangle() const {
+   return Rectangle(x_ + kCollisionX.left(),
+                    y_ + kCollisionY.top(),
+                    kCollisionX.width(),
+                    kCollisionY.height());
+}
+
 void Player::initializeSprites(Graphics& graphics) {
    for (int motion = FIRST_MOTION_TYPE;
             motion < LAST_MOTION_TYPE;

@@ -11,6 +11,7 @@ const units::AngularVelocity kAngularVelocity = 120.0f / 1000.0f;
 }
 
 FirstCaveBat::FirstCaveBat(Graphics& graphics, units::Game x, units::Game y) :
+   center_y_(y),
    x_(x),
    y_(y),
    facing_(RIGHT),
@@ -20,9 +21,7 @@ FirstCaveBat::FirstCaveBat(Graphics& graphics, units::Game x, units::Game y) :
 }
 
 void FirstCaveBat::draw(Graphics& graphics) const {
-   const units::Game y = y_ +
-      units::tileToGame(5) / 2.0f * std::sin(units::degreesToRadians(flight_angle_));
-   sprites_.at(getSpriteState())->draw(graphics, x_, y);
+   sprites_.at(getSpriteState())->draw(graphics, x_, y_);
 }
 
 void FirstCaveBat::update(units::MS elapsed_time, units::Game player_x) {
@@ -31,6 +30,9 @@ void FirstCaveBat::update(units::MS elapsed_time, units::Game player_x) {
    facing_ = x_ + units::tileToGame(1) / 2.0f > player_x ?
       LEFT :
       RIGHT;
+
+   y_ = center_y_ +
+      units::tileToGame(5) / 2.0f * units::Game(std::sin(units::degreesToRadians(flight_angle_)));
 
    sprites_[getSpriteState()]->update(elapsed_time);
 }
