@@ -28,6 +28,7 @@ struct Player {
    void startJump();
    void stopJump();
 
+   Rectangle damageRectangle() const; 
    units::Game center_x() const { return x_ + units::tileToGame(1) / 2.0f; }
 
   private:

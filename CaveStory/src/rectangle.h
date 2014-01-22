@@ -17,6 +17,13 @@ struct Rectangle {
 
    units::Game width() const { return width_; }
    units::Game height() const { return height_; }
+
+   bool collidesWith(const Rectangle& other) const {
+      return right() >= other.left() &&
+             left() <= other.right() &&
+             top () <= other.bottom() &&
+             bottom() >= other.top();
+   }
   private:
    const units::Game x_, y_, width_, height_;
 };

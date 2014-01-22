@@ -1,0 +1,10 @@
+Episode 21 - Player/Enemy Collisions
+====================================
+
+Problem:
+ - Need to be able to determine if our bat is colliding with the player.
+
+Solution:
+ 1 - player damage rectangle (one rectangle, not two)
+ 2 - bat damage rectangle (single point)
+ 3 - collidesWith? method

@@ -33,7 +33,7 @@ void Game::eventLoop() {
    SDL_Event event;
 
    player_.reset(new Player(graphics, units::tileToGame(kScreenWidth / 2), units::tileToGame(kScreenHeight / 2)));
-   bat_.reset(new FirstCaveBat(graphics, units::tileToGame(5), units::tileToGame(kScreenHeight / 2)));
+   bat_.reset(new FirstCaveBat(graphics, units::tileToGame(7), units::tileToGame(kScreenHeight / 2 + 1)));
    map_.reset(Map::createTestMap(graphics));
 
    bool running = true;
@@ -105,7 +105,11 @@ void Game::update(units::MS elapsed_time_ms) {
    player_->update(elapsed_time_ms, *map_);
 
    bat_->update(elapsed_time_ms, player_->center_x());
-   map_->update(elapsed_time_ms);
+
+   printf("Checking collisions\n");
+   if (bat_->damageRectangle().collidesWith(player_->damageRectangle())) {
+      printf("Do Damage to Quote!\n");
+   }
 }
 
 void Game::draw(Graphics& graphics) {

@@ -4,6 +4,7 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include "units.h"
+#include "rectangle.h"
 
 struct Graphics;
 struct Sprite;
@@ -13,6 +14,9 @@ struct FirstCaveBat {
 
    void draw(Graphics& graphics) const;
    void update(units::MS elapsed_time, units::Game player_x);
+
+   Rectangle damageRectangle() const
+      { return Rectangle(x_ + units::tileToGame(1) / 2.0f, y_ + units::tileToGame(1) / 2.0f, 0, 0); }
 
   private:
    enum Facing {
@@ -32,6 +36,7 @@ struct FirstCaveBat {
    void initializeSprite(Graphics& graphics, const SpriteState& sprite_state);
    SpriteState getSpriteState() const;
 
+   const units::Game center_y_;
    units::Game x_, y_;
    units::Degrees flight_angle_;
    Facing facing_;
