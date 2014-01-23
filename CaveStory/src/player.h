@@ -1,6 +1,7 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
+#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <map>
 
@@ -16,6 +17,7 @@ struct Player {
 
    void update(units::MS elapsed_time_ms, const Map& map);
    void draw(Graphics& graphics);
+   void drawHUD(Graphics& graphics) const;
 
    void startMovingLeft();
    void startMovingRight();
@@ -31,7 +33,7 @@ struct Player {
    void takeDamage();
 
    Rectangle damageRectangle() const; 
-   units::Game center_x() const { return x_ + units::tileToGame(1) / 2.0f; }
+   units::Game center_x() const { return x_ + units::kHalfTile; }
 
   private:
    enum MotionType {
@@ -84,6 +86,8 @@ struct Player {
    void updateX(units::MS elapsed_time_ms, const Map& map);
    void updateY(units::MS elapsed_time_ms, const Map& map);
 
+   bool spriteIsVisible() const;
+
    bool on_ground() const { return on_ground_; }
 
    units::Game x_, y_;
@@ -99,6 +103,9 @@ struct Player {
    bool invincible_;
 
    std::map<SpriteState, boost::shared_ptr<Sprite> > sprites_;
+   boost::scoped_ptr<Sprite> health_bar_sprite_;
+   boost::scoped_ptr<Sprite> health_fill_sprite_;
+   boost::scoped_ptr<Sprite> three_;
 };
 
 #endif // PLAYER_H_

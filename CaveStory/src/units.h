@@ -46,6 +46,8 @@ inline Pixel tileToPixel(Tile tile) {
    return gameToPixel(tileToGame(tile));
 }
 
+const Game kHalfTile = tileToGame(1) / 2.0f;
+
 } // units
 
 #endif // UNITS_H_

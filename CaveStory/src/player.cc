@@ -52,6 +52,21 @@ const Rectangle kCollisionY(10, 2,
 const units::MS kInvincibleFlashTime = 50;
 const units::MS kInvincibleTime = 3000;
 
+// HUD Constants
+const units::Game kHealthBarX = units::tileToGame(1);
+const units::Game kHealthBarY = units::tileToGame(2);
+const units::Game kHealthBarSourceX = 0;
+const units::Game kHealthBarSourceY = 5 * units::kHalfTile;
+const units::Tile kHealthBarSourceWidth = 4;
+const units::Game kHealthBarSourceHeight = units::kHalfTile;
+
+const units::Game kHealthFillX = 5*units::kHalfTile;
+const units::Game kHealthFillY = units::tileToGame(2);
+
+const units::Game kHealthFillSourceX = 0;
+const units::Game kHealthFillSourceY = 3 * units::kHalfTile;
+const units::Game kHealthFillSourceHeight = units::kHalfTile;
+
 struct CollisionInfo {
    bool collided;
    units::Tile row, col;
@@ -114,10 +129,18 @@ void Player::update(units::MS elapsed_time_ms, const Map& map) {
 }
 
 void Player::draw(Graphics& graphics) {
-   // % 2 == 0: 1 part invisible 1 part visible
-   // % 3 == 0: 1 part invisible 2 part visible
-   if (invincible_ && invincible_time_ / kInvincibleFlashTime % 2 == 0) return;
-   sprites_[getSpriteState()]->draw(graphics, x_, y_);
+   if (spriteIsVisible()) {
+      sprites_[getSpriteState()]->draw(graphics, x_, y_);
+   }
+}
+
+void Player::drawHUD(Graphics& graphics) const {
+   if (spriteIsVisible()) {
+      health_bar_sprite_->draw(graphics, kHealthBarX, kHealthBarY);
+      health_fill_sprite_->draw(graphics, kHealthFillX, kHealthFillY);
+
+      three_->draw(graphics, units::tileToGame(2), units::tileToGame(2));
+   }
 }
 
 void Player::startMovingLeft() {
@@ -184,6 +207,19 @@ Rectangle Player::damageRectangle() const {
 }
 
 void Player::initializeSprites(Graphics& graphics) {
+   health_bar_sprite_.reset(new Sprite(
+      graphics, "../content/TextBox.bmp",
+      units::gameToPixel(kHealthBarSourceX), units::gameToPixel(kHealthBarSourceY),
+      units::tileToPixel(kHealthBarSourceWidth), units::gameToPixel(kHealthBarSourceHeight)));
+   health_fill_sprite_.reset(new Sprite(
+      graphics, "../content/TextBox.bmp",
+      units::gameToPixel(kHealthFillSourceX), units::gameToPixel(kHealthFillSourceY),
+      units::gameToPixel(5 * units::kHalfTile - 2.0f),
+      units::gameToPixel(kHealthFillSourceHeight)));
+   three_.reset(new Sprite(
+      graphics, "../content/TextBox.bmp",
+      units::gameToPixel(3*units::kHalfTile), units::gameToPixel(7 * units::kHalfTile),
+      units::gameToPixel(units::kHalfTile), units::gameToPixel(units::kHalfTile)));
    for (int motion = FIRST_MOTION_TYPE;
             motion < LAST_MOTION_TYPE;
             ++motion) {
@@ -409,4 +445,10 @@ void Player::updateY(units::MS elapsed_time_ms, const Map& map) {
          on_ground_ = true;
       }
    }
+}
+
+bool Player::spriteIsVisible() const {
+   // % 2 == 0: 1 part invisible 1 part visible
+   // % 3 == 0: 1 part invisible 2 part visible
+   return !(invincible_ && invincible_time_ / kInvincibleFlashTime % 2 == 0);
 }
