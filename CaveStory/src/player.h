@@ -7,6 +7,7 @@
 
 #include "sprite.h"
 #include "rectangle.h"
+#include "number_sprite.h"
 #include "units.h"
 
 struct Graphics;
@@ -105,7 +106,7 @@ struct Player {
    std::map<SpriteState, boost::shared_ptr<Sprite> > sprites_;
    boost::scoped_ptr<Sprite> health_bar_sprite_;
    boost::scoped_ptr<Sprite> health_fill_sprite_;
-   boost::scoped_ptr<Sprite> three_;
+   boost::scoped_ptr<NumberSprite> health_number_sprite_;
 };
 
 #endif // PLAYER_H_

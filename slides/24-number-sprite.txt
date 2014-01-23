@@ -1,0 +1,21 @@
+Episode 24 - Creating a Number Sprite
+=====================================
+
+Problem:
+ - Need to create sprites of arbitrary numbers, with arbitrary number of digits
+
+Solution:
+ - Create a number class that takes:
+   1 - Number
+   2 - Number of digits (for padding)
+
+Sub-Problem:
+ - Converting multi-digit numbers to single-digits
+
+Given:
+1234
+1234 % 10 = 4   // Then divide by 10
+123 % 10 = 3    // /= 10
+12 % 10 = 2     // /= 10
+1 % 10 = 1      // /= 10
+0 = DONE
