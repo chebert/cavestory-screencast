@@ -1,0 +1,10 @@
+Episode 23 - Roughing in the Health HUD
+=======================================
+
+Problem:
+ - Need a visual indicator to keep track of player health.
+
+Solution:
+ 1 - We are just going to do a roughing in. Placing sprites and such.
+ 2 - To make things easier, I'm introducing a half-tile constant of units::Game.
+ 3 - Bug fix: we aren't drawing pure black OR pure white. I made a bad assumption.

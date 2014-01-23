@@ -16,7 +16,7 @@ struct FirstCaveBat {
    void update(units::MS elapsed_time, units::Game player_x);
 
    Rectangle damageRectangle() const
-      { return Rectangle(x_ + units::tileToGame(1) / 2.0f, y_ + units::tileToGame(1) / 2.0f, 0, 0); }
+      { return Rectangle(x_ + units::kHalfTile, y_ + units::kHalfTile, 0, 0); }
 
   private:
    enum Facing {
