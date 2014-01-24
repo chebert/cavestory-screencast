@@ -53,25 +53,6 @@ const Rectangle kCollisionY(10, 2,
 const units::MS kInvincibleFlashTime = 50;
 const units::MS kInvincibleTime = 3000;
 
-// HUD Constants
-const units::Game kHealthBarX = units::tileToGame(1);
-const units::Game kHealthBarY = units::tileToGame(2);
-const units::Game kHealthBarSourceX = 0;
-const units::Game kHealthBarSourceY = 5 * units::kHalfTile;
-const units::Tile kHealthBarSourceWidth = 4;
-const units::Game kHealthBarSourceHeight = units::kHalfTile;
-
-const units::Game kHealthFillX = 5*units::kHalfTile;
-const units::Game kHealthFillY = units::tileToGame(2);
-
-const units::Game kHealthFillSourceX = 0;
-const units::Game kHealthFillSourceY = 3 * units::kHalfTile;
-const units::Game kHealthFillSourceHeight = units::kHalfTile;
-
-const units::Game kHealthNumberX = units::tileToGame(3) / 2;
-const units::Game kHealthNumberY = units::tileToGame(2);
-const int kHealthNumberNumDigits = 2;
-
 struct CollisionInfo {
    bool collided;
    units::Tile row, col;
@@ -115,6 +96,7 @@ Player::Player(Graphics& graphics, units::Game x, units::Game y) :
    on_ground_(false),
    jump_active_(false),
    interacting_(false),
+   health_(graphics),
    invincible_time_(0),
    invincible_(false)
 {
@@ -128,6 +110,7 @@ void Player::update(units::MS elapsed_time_ms, const Map& map) {
       invincible_time_ += elapsed_time_ms;
       invincible_ = invincible_time_ < kInvincibleTime;
    }
+   health_.update(elapsed_time_ms);
 
    updateX(elapsed_time_ms, map);
    updateY(elapsed_time_ms, map);
@@ -139,12 +122,9 @@ void Player::draw(Graphics& graphics) {
    }
 }
 
-void Player::drawHUD(Graphics& graphics) const {
+void Player::drawHUD(Graphics& graphics) {
    if (spriteIsVisible()) {
-      health_bar_sprite_->draw(graphics, kHealthBarX, kHealthBarY);
-      health_fill_sprite_->draw(graphics, kHealthFillX, kHealthFillY);
-
-      health_number_sprite_->draw(graphics, kHealthNumberX, kHealthNumberY);
+      health_.draw(graphics);
    }
 }
 
@@ -198,6 +178,8 @@ void Player::stopJump() {
 void Player::takeDamage() {
    if (invincible_) return;
 
+   health_.takeDamage(2);
+
    velocity_y_ = std::min(velocity_y_, -kShortJumpSpeed);
    printf("Do Damage to Quote!\n");
    invincible_ = true;
@@ -212,16 +194,6 @@ Rectangle Player::damageRectangle() const {
 }
 
 void Player::initializeSprites(Graphics& graphics) {
-   health_bar_sprite_.reset(new Sprite(
-      graphics, "../content/TextBox.bmp",
-      units::gameToPixel(kHealthBarSourceX), units::gameToPixel(kHealthBarSourceY),
-      units::tileToPixel(kHealthBarSourceWidth), units::gameToPixel(kHealthBarSourceHeight)));
-   health_fill_sprite_.reset(new Sprite(
-      graphics, "../content/TextBox.bmp",
-      units::gameToPixel(kHealthFillSourceX), units::gameToPixel(kHealthFillSourceY),
-      units::gameToPixel(5 * units::kHalfTile - 2.0f),
-      units::gameToPixel(kHealthFillSourceHeight)));
-   health_number_sprite_.reset(new NumberSprite(graphics, 52, kHealthNumberNumDigits));
    for (int motion = FIRST_MOTION_TYPE;
             motion < LAST_MOTION_TYPE;
             ++motion) {

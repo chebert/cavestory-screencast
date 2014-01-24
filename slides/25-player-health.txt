@@ -1,0 +1,30 @@
+Episode 25 - Player Health
+==========================
+
+Problem:
+ - Keep track, visually and in-game, of player health.
+ - BONUS: more visual indicators for damage
+
+Solution:
+ - struct Health
+   - units::HP max_health
+   - units::HP current_health
+   - units::MS damage_time_    // Time to keep track of until damage change occurs
+   - our HUD sprites
+   - a new damage_fill sprite
+
+ - VaryingWidthSprite
+   - Our fill bars need to change width.
+
+Sub-problem:
+ - Need to calculate how wide to make health fill/damage.
+      /-FillWidth?
+ |---/----|
+ |=========---------|
+ |- Max_Fill_Width -|
+
+ Max_Health =  6
+ Current_Health =  3
+
+ FillWidth = Max_Fill_Width * Current_Health / Max_Health
+ - Pro-tip: We can (and will) think of this width as an offset from the left.
