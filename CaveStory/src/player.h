@@ -6,6 +6,7 @@
 #include <map>
 
 #include "sprite.h"
+#include "varying_width_sprite.h"
 #include "rectangle.h"
 #include "number_sprite.h"
 #include "units.h"
@@ -18,7 +19,7 @@ struct Player {
 
    void update(units::MS elapsed_time_ms, const Map& map);
    void draw(Graphics& graphics);
-   void drawHUD(Graphics& graphics) const;
+   void drawHUD(Graphics& graphics);
 
    void startMovingLeft();
    void startMovingRight();
@@ -74,6 +75,27 @@ struct Player {
    };
    friend bool operator<(const SpriteState& a, const SpriteState& b);
 
+   struct Health {
+      Health(Graphics& graphics);
+
+      void update(units::MS elapsed_time);
+      void draw(Graphics& graphics);
+
+      // returns true if we have died.
+      bool takeDamage(units::HP damage);
+     private:
+      units::Game fillOffset(units::HP health) const;
+
+      units::HP damage_;
+      units::MS damage_time_;
+
+      units::HP max_health_;
+      units::HP current_health_;
+      Sprite health_bar_sprite_;
+      VaryingWidthSprite health_fill_sprite_;
+      VaryingWidthSprite damage_fill_sprite_;
+   };
+
    void initializeSprites(Graphics& graphics);
    void initializeSprite(Graphics& graphics, const SpriteState& sprite_state);
    SpriteState getSpriteState();
@@ -100,13 +122,11 @@ struct Player {
    bool jump_active_;
    bool interacting_;
 
+   Health health_;
    units::MS invincible_time_;
    bool invincible_;
 
    std::map<SpriteState, boost::shared_ptr<Sprite> > sprites_;
-   boost::scoped_ptr<Sprite> health_bar_sprite_;
-   boost::scoped_ptr<Sprite> health_fill_sprite_;
-   boost::scoped_ptr<NumberSprite> health_number_sprite_;
 };
 
 #endif // PLAYER_H_
