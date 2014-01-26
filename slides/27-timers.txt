@@ -1,0 +1,23 @@
+Episode 27 - Timers
+===================
+
+Problem:
+ - Have a couple of "time-keeping" variables, all updated identically (+= elapsed_time)
+  - invincibility time
+  - health text-change timer
+  - ...and like a billion (hyperbole) more to come
+
+Solution:
+ - Organize logic into a Timer class
+   - Given: expiration time
+
+   At any point, we need to know:
+   - expired?
+   - active?
+   - current time?
+
+ - Bonus: timers are going to be self updating!
+  - PROS: never have to worry about updating twice or not at all
+          can call update once, and it will take care of things
+  - CONS: Hides when the timers are updated from us!
+            - "us" being the objects using timers
