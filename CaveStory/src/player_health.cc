@@ -73,7 +73,7 @@ void Player::Health::draw(Graphics& graphics) {
          graphics, kHealthFillX + fillOffset(current_health_ - damage_), kHealthFillY);
    }
 
-   NumberSprite(graphics, current_health_, kHealthNumberNumDigits).draw(
+   NumberSprite::HUDNumber(graphics, current_health_, kHealthNumberNumDigits).draw(
       graphics, kHealthNumberX, kHealthNumberY);
 }
 

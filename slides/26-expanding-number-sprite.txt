@@ -1,0 +1,13 @@
+Episode 26 - Expanding Upon our Number Sprite
+=============================================
+
+Problem:
+ - need to represent damage (red) text
+ - need to prepend our number with +/-
+
+Solution:
+ - expand upon our number class with "named constructors"
+   - really just static methods that return an object (a bit like our createTestMap)
+   1 - HUDNumber
+   2 - DamageNumber
+   3 - ExperienceNumber  // But we'll deal with this later
