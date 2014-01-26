@@ -10,6 +10,7 @@
 #include "rectangle.h"
 #include "number_sprite.h"
 #include "units.h"
+#include "timer.h"
 
 struct Graphics;
 struct Map;
@@ -87,7 +88,7 @@ struct Player {
       units::Game fillOffset(units::HP health) const;
 
       units::HP damage_;
-      units::MS damage_time_;
+      Timer damage_timer_;
 
       units::HP max_health_;
       units::HP current_health_;
@@ -123,8 +124,7 @@ struct Player {
    bool interacting_;
 
    Health health_;
-   units::MS invincible_time_;
-   bool invincible_;
+   Timer invincible_timer_;
 
    std::map<SpriteState, boost::shared_ptr<Sprite> > sprites_;
 };

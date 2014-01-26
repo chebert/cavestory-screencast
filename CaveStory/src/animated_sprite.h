@@ -2,6 +2,7 @@
 #define ANIMATED_SPRITE_H_
 
 #include "sprite.h"
+#include "timer.h"
 
 struct AnimatedSprite : public Sprite {
    AnimatedSprite(
@@ -14,10 +15,9 @@ struct AnimatedSprite : public Sprite {
    void update(units::MS elapsed_time_ms);
 
   private:
-   const units::MS frame_time_;
+   Timer frame_timer_;
    const units::Frame num_frames_;
    units::Frame current_frame_;
-   units::MS elapsed_time_; // Elapsed time since the last frame change.
 };
 
 #endif // ANIMATED_SPRITE_H_
