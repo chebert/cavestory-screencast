@@ -11,6 +11,7 @@
 #include "number_sprite.h"
 #include "units.h"
 #include "timer.h"
+#include "damage_text.h"
 
 struct Graphics;
 struct Map;
@@ -33,10 +34,11 @@ struct Player {
    void startJump();
    void stopJump();
 
-   void takeDamage();
+   void takeDamage(units::HP damage);
 
    Rectangle damageRectangle() const; 
    units::Game center_x() const { return x_ + units::kHalfTile; }
+   units::Game center_y() const { return y_ + units::kHalfTile; }
 
   private:
    enum MotionType {
@@ -125,6 +127,7 @@ struct Player {
 
    Health health_;
    Timer invincible_timer_;
+   DamageText damage_text_;
 
    std::map<SpriteState, boost::shared_ptr<Sprite> > sprites_;
 };

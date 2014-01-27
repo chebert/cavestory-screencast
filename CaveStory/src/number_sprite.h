@@ -22,9 +22,8 @@ struct NumberSprite {
       { return NumberSprite(graphics, number, 0, WHITE, PLUS); }
    
    void draw(Graphics& graphics, units::Game x, units::Game y);
-
-   units::Game width() const { return units::kHalfTile * reversed_sprites_.size(); }
-   units::Game height() const { return units::kHalfTile; }
+   void drawCentered(Graphics& graphics, units::Game x, units::Game y)
+      { draw(graphics, x - width() / 2, y - height() / 2); }
 
   private:
    enum ColorType {
@@ -39,8 +38,11 @@ struct NumberSprite {
    // if num_digits is 0, we don't care how much space it takes up.
    NumberSprite(Graphics& graphics, int number, int num_digits, ColorType color, OperatorType op);
 
+   units::Game width() const { return units::kHalfTile * reversed_glyphs_.size(); }
+   units::Game height() const { return units::kHalfTile; }
+
    units::Game padding_;
-   std::vector<boost::shared_ptr<Sprite> > reversed_sprites_;
+   std::vector<boost::shared_ptr<Sprite> > reversed_glyphs_;
 };
 
 #endif // NUMBER_SPRITE_H_

@@ -18,6 +18,8 @@ struct FirstCaveBat {
    Rectangle damageRectangle() const
       { return Rectangle(x_ + units::kHalfTile, y_ + units::kHalfTile, 0, 0); }
 
+   units::HP contactDamage() const;
+
   private:
    enum Facing {
       FIRST_FACING,
