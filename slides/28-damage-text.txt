@@ -1,0 +1,13 @@
+Episode 28 - Damage Text (First Pass)
+=====================================
+
+From last episode:
+ - radix/reversed_glyphs (credit goes to Sean Cline)
+
+Problem:
+ - We are looking at Quote, not at his health bar. How much damage did he just take?
+
+Solution:
+ - Damage text. appears where Quote is, and floats up.
+    - floats one tile up in about half a second.
+    - stays for about two seconds and then disappears.

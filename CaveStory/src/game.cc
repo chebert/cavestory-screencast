@@ -110,7 +110,7 @@ void Game::update(units::MS elapsed_time_ms) {
    bat_->update(elapsed_time_ms, player_->center_x());
 
    if (bat_->damageRectangle().collidesWith(player_->damageRectangle())) {
-      player_->takeDamage();
+      player_->takeDamage(bat_->contactDamage());
    }
 }
 
