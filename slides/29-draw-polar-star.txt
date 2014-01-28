@@ -1,0 +1,14 @@
+Episode 29 - Drawing the Polar Star
+===================================
+
+Problem:
+ - Gun. I want gun.
+
+Solution:
+ - Draw a gun for quote. The Polar Star
+    - drawn at an offset from quote
+
+ - start simple. RIGHT/HORIZONTAL first
+ - build on simplicity. LEFT/HORIZONTAL
+ - SpriteState...as a boost::tuple
+   - no longer need to implement operator<

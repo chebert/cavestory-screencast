@@ -1,4 +1,4 @@
-#include <SDL/SDL.h> // sdl does some setup magic for osx, so it must be defined here
+#include "SDL/SDL.h"
 #include "game.h"
 
 int main(int, char**) {
