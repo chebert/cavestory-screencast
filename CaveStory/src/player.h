@@ -1,10 +1,6 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
-#include <map>
-
 #include "sprite.h"
 #include "sprite_state.h"
 #include "varying_width_sprite.h"
@@ -53,19 +49,14 @@ struct Player {
       LAST_MOTION_TYPE
    };
 
-   struct SpriteState {
-      SpriteState(MotionType motion_type=STANDING,
-                  HorizontalFacing horizontal_facing=LEFT,
-                  VerticalFacing vertical_facing=HORIZONTAL) :
-         motion_type(motion_type),
-         horizontal_facing(horizontal_facing),
-         vertical_facing(vertical_facing) {}
+   typedef boost::tuple<MotionType, HorizontalFacing, VerticalFacing> SpriteTuple;
+   struct SpriteState : public SpriteTuple {
+      SpriteState(const SpriteTuple& tuple) : SpriteTuple(tuple) {}
 
-      MotionType motion_type;
-      HorizontalFacing horizontal_facing;
-      VerticalFacing vertical_facing;
+      MotionType motion_type() const { return get<0>(); }
+      HorizontalFacing horizontal_facing() const { return get<1>(); }
+      VerticalFacing vertical_facing() const { return get<2>(); }
    };
-   friend bool operator<(const SpriteState& a, const SpriteState& b);
 
    struct Health {
       Health(Graphics& graphics);

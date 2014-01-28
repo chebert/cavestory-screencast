@@ -2,8 +2,6 @@
 #define POLAR_STAR_H_
 
 #include "sprite_state.h"
-#include <map>
-#include <boost/shared_ptr.hpp>
 
 #include "units.h"
 
@@ -18,20 +16,12 @@ struct PolarStar {
       HorizontalFacing horizontal_facing, VerticalFacing vertical_facing,
       units::Game x, units::Game y);
   private:
-   struct SpriteState {
-      SpriteState(HorizontalFacing horizontal_facing, VerticalFacing vertical_facing) :
-         horizontal_facing(horizontal_facing),
-         vertical_facing(vertical_facing) {}
-
-      HorizontalFacing horizontal_facing;
-      VerticalFacing vertical_facing;
+   typedef boost::tuple<HorizontalFacing, VerticalFacing> SpriteTuple;
+   struct SpriteState : public SpriteTuple {
+      SpriteState(const SpriteTuple& tuple) : SpriteTuple(tuple) {}
+      HorizontalFacing horizontal_facing() const { return get<0>(); }
+      VerticalFacing vertical_facing() const { return get<1>(); }
    };
-   friend bool operator<(const SpriteState& a, const SpriteState& b) {
-      if (a.horizontal_facing != b.horizontal_facing) {
-         return a.horizontal_facing < b.horizontal_facing;
-      }
-      return a.vertical_facing < b.vertical_facing;
-   }
 
    void initializeSprites(Graphics& graphics);
    void initializeSprite(Graphics& graphics, const SpriteState& sprite_state);

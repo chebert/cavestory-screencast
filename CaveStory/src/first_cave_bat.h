@@ -1,8 +1,8 @@
 #ifndef FIRST_CAVE_BAT_H_
 #define FIRST_CAVE_BAT_H_
 
-#include <boost/shared_ptr.hpp>
-#include <map>
+#include "sprite_state.h"
+
 #include "units.h"
 #include "rectangle.h"
 
@@ -21,18 +21,11 @@ struct FirstCaveBat {
    units::HP contactDamage() const;
 
   private:
-   enum Facing {
-      FIRST_FACING,
-      LEFT = FIRST_FACING,
-      RIGHT,
-      LAST_FACING
+   typedef boost::tuple<HorizontalFacing> SpriteTuple;
+   struct SpriteState : public SpriteTuple {
+      SpriteState(const SpriteTuple& tuple) : SpriteTuple(tuple) {}
+      HorizontalFacing horizontal_facing() const { return get<0>(); }
    };
-   struct SpriteState {
-      SpriteState(Facing facing) : facing(facing) {}
-      Facing facing;
-   };
-   friend bool operator<(const SpriteState& a, const SpriteState& b)
-      { return a.facing < b.facing; }
 
    void initializeSprites(Graphics& graphics);
    void initializeSprite(Graphics& graphics, const SpriteState& sprite_state);
@@ -41,7 +34,7 @@ struct FirstCaveBat {
    const units::Game center_y_;
    units::Game x_, y_;
    units::Degrees flight_angle_;
-   Facing facing_;
+   HorizontalFacing facing_;
    std::map<SpriteState, boost::shared_ptr<Sprite> > sprites_;
 };
 

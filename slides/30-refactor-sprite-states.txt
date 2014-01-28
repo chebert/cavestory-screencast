@@ -1,0 +1,23 @@
+Episode 30 - Refactor Sprite State
+==================================
+
+Problem:
+ - Making sprite states is painful:
+   1 - operator<
+   2 - enum loops are painful
+
+Solutions:
+ 1 - boost::tuple
+   - syntax
+   TYPE: boost::tuple<HorizontalFacing, VerticalFacing>
+   CONSTRUCTION: boost::make_tuple(RIGHT, UP)
+   ACCESSORS: Given tuple tup
+     tup.get<0>() // returns the HorizontalFacing
+     tup.get<1>() // returns the VerticalFacing
+
+ 2 - macros
+  -general warning about macros. they are very powerful but can be very painful
+  in macros, ## means "use the literal characters, and not the value"
+  #define ENUM_FOREACH(enum_name) \
+      FIRST_##enum_name
+      // ex. calling MACRO(HORIZONTAL_FACING) is equivalent to FIRST_HORIZONTAL_FACING

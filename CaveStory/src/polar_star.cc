@@ -32,25 +32,21 @@ void PolarStar::draw(
       y -= units::kHalfTile / 2;
    if (vertical_facing == DOWN)
       y += units::kHalfTile / 2;
-   sprite_map_[SpriteState(horizontal_facing, vertical_facing)]->draw(graphics, x, y);
+   sprite_map_[boost::make_tuple(horizontal_facing, vertical_facing)]->draw(graphics, x, y);
 }
 
 void PolarStar::initializeSprites(Graphics& graphics) {
-   for (int h_facing = FIRST_HORIZONTAL_FACING;
-            h_facing < LAST_HORIZONTAL_FACING;
-            ++h_facing) {
-      for (int v_facing = FIRST_VERTICAL_FACING;
-               v_facing < LAST_VERTICAL_FACING;
-               ++v_facing) {
-         initializeSprite(graphics, SpriteState((HorizontalFacing)h_facing,
-                                                (VerticalFacing)v_facing));
+   ENUM_FOREACH(h_facing, HORIZONTAL_FACING) {
+      ENUM_FOREACH(v_facing, VERTICAL_FACING) {
+         initializeSprite(graphics, boost::make_tuple((HorizontalFacing)h_facing,
+                                                      (VerticalFacing)v_facing));
       }
    }
 }
 
 void PolarStar::initializeSprite(Graphics& graphics, const SpriteState& sprite_state) {
-   units::Tile tile_y = sprite_state.horizontal_facing == LEFT ? kLeftOffset : kRightOffset;
-   switch (sprite_state.vertical_facing) {
+   units::Tile tile_y = sprite_state.horizontal_facing() == LEFT ? kLeftOffset : kRightOffset;
+   switch (sprite_state.vertical_facing()) {
       case HORIZONTAL:
          tile_y += kHorizontalOffset;
          break;
