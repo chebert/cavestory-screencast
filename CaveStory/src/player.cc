@@ -72,19 +72,6 @@ CollisionInfo getWallCollisionInfo(const Map& map, const Rectangle& rectangle) {
 }
 }
 
-bool operator<(const Player::SpriteState& a, const Player::SpriteState& b) {
-   if (a.motion_type != b.motion_type) {
-      return a.motion_type < b.motion_type;
-   }
-   if (a.horizontal_facing != b.horizontal_facing) {
-      return a.horizontal_facing < b.horizontal_facing;
-   }
-   if (a.vertical_facing != b.vertical_facing) {
-      return a.vertical_facing < b.vertical_facing;
-   }
-   return false;
-}
-
 Player::Player(Graphics& graphics, units::Game x, units::Game y) :
    x_(x),
    y_(y),
@@ -192,18 +179,12 @@ Rectangle Player::damageRectangle() const {
 }
 
 void Player::initializeSprites(Graphics& graphics) {
-   for (int motion = FIRST_MOTION_TYPE;
-            motion < LAST_MOTION_TYPE;
-            ++motion) {
-      for (int h_facing = FIRST_HORIZONTAL_FACING;
-               h_facing < LAST_HORIZONTAL_FACING;
-               ++h_facing) {
-         for (int v_facing = FIRST_VERTICAL_FACING;
-                  v_facing < LAST_VERTICAL_FACING;
-                  ++v_facing) {
-            initializeSprite(graphics, SpriteState((MotionType)motion,
-                                                   (HorizontalFacing)h_facing,
-                                                   (VerticalFacing)v_facing));
+   ENUM_FOREACH(motion, MOTION_TYPE) {
+      ENUM_FOREACH(h_facing, HORIZONTAL_FACING) {
+         ENUM_FOREACH(v_facing, VERTICAL_FACING) {
+            initializeSprite(graphics, boost::make_tuple((MotionType)motion,
+                                                         (HorizontalFacing)h_facing,
+                                                         (VerticalFacing)v_facing));
          }
       }
    }
@@ -211,12 +192,12 @@ void Player::initializeSprites(Graphics& graphics) {
 
 void Player::initializeSprite(Graphics& graphics,
                               const SpriteState& sprite_state) {
-   units::Tile tile_y = sprite_state.horizontal_facing == LEFT ?
+   units::Tile tile_y = sprite_state.horizontal_facing() == LEFT ?
       kCharacterFrame :
       1 + kCharacterFrame;
 
    units::Tile tile_x;
-   switch (sprite_state.motion_type) {
+   switch (sprite_state.motion_type()) {
       case WALKING:
          tile_x = kWalkFrame;
          break;
@@ -235,11 +216,11 @@ void Player::initializeSprite(Graphics& graphics,
       case LAST_MOTION_TYPE:
          break;
    }
-   tile_x = sprite_state.vertical_facing == UP ?
+   tile_x = sprite_state.vertical_facing() == UP ?
       tile_x + kUpFrameOffset :
       tile_x;
 
-   if (sprite_state.motion_type == WALKING) {
+   if (sprite_state.motion_type() == WALKING) {
       sprites_[sprite_state] =
          boost::shared_ptr<Sprite>(new AnimatedSprite(
             graphics,
@@ -248,8 +229,8 @@ void Player::initializeSprite(Graphics& graphics,
             units::tileToPixel(1), units::tileToPixel(1),
             kWalkFps, kNumWalkFrames));
    } else {
-      if (sprite_state.vertical_facing == DOWN && 
-          (sprite_state.motion_type == JUMPING || sprite_state.motion_type == FALLING)) {
+      if (sprite_state.vertical_facing() == DOWN && 
+          (sprite_state.motion_type() == JUMPING || sprite_state.motion_type() == FALLING)) {
          tile_x = kDownFrame;
       }
       sprites_[sprite_state] =
@@ -270,7 +251,7 @@ Player::SpriteState Player::getSpriteState() {
    } else {
       motion = velocity_y_ < 0.0f ? JUMPING : FALLING;
    }
-   return SpriteState(
+   return boost::make_tuple(
          motion,
          horizontal_facing_,
          vertical_facing_

@@ -45,13 +45,13 @@ units::HP FirstCaveBat::contactDamage() const {
 }
 
 void FirstCaveBat::initializeSprites(Graphics& graphics) {
-   for (int facing = FIRST_FACING; facing < LAST_FACING; ++facing) {
-      initializeSprite(graphics, SpriteState(Facing(facing)));
+   ENUM_FOREACH(h_facing, HORIZONTAL_FACING) {
+      initializeSprite(graphics, boost::make_tuple(HorizontalFacing(h_facing)));
    }
 }
 
 void FirstCaveBat::initializeSprite(Graphics& graphics, const SpriteState& sprite_state) {
-   units::Tile tile_y = sprite_state.facing == RIGHT ? 3 : 2;
+   units::Tile tile_y = sprite_state.horizontal_facing() == RIGHT ? 3 : 2;
    sprites_[sprite_state] = boost::shared_ptr<Sprite>(new AnimatedSprite(
       graphics, "../content/NpcCemet.bmp",
       units::tileToPixel(2), units::tileToPixel(tile_y),
@@ -60,5 +60,5 @@ void FirstCaveBat::initializeSprite(Graphics& graphics, const SpriteState& sprit
 }
 
 FirstCaveBat::SpriteState FirstCaveBat::getSpriteState() const {
-   return SpriteState(facing_);
+   return boost::make_tuple(facing_);
 }
