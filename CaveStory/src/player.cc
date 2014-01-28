@@ -97,7 +97,8 @@ Player::Player(Graphics& graphics, units::Game x, units::Game y) :
    jump_active_(false),
    interacting_(false),
    health_(graphics),
-   invincible_timer_(kInvincibleTime)
+   invincible_timer_(kInvincibleTime),
+   polar_star_(graphics)
 {
    initializeSprites(graphics);
 }
@@ -114,6 +115,7 @@ void Player::update(units::MS elapsed_time_ms, const Map& map) {
 
 void Player::draw(Graphics& graphics) {
    if (spriteIsVisible()) {
+      polar_star_.draw(graphics, horizontal_facing_, vertical_facing_, x_, y_);
       sprites_[getSpriteState()]->draw(graphics, x_, y_);
    }
 }
