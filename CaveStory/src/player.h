@@ -117,12 +117,16 @@ struct Player {
 
    MotionType motionType() const;
    bool on_ground() const { return on_ground_; }
+   VerticalFacing vertical_facing() const {
+      return on_ground() && intended_vertical_facing_ == DOWN ?
+               HORIZONTAL : intended_vertical_facing_;
+   }
 
    units::Game x_, y_;
    units::Velocity velocity_x_, velocity_y_;
    int acceleration_x_;
    HorizontalFacing horizontal_facing_;
-   VerticalFacing vertical_facing_;
+   VerticalFacing intended_vertical_facing_;
    bool on_ground_;
    bool jump_active_;
    bool interacting_;

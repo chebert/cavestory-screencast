@@ -1,0 +1,11 @@
+Episode 32 - Actual Vertical Facing
+===================================
+
+Problem:
+ - when the player is on the ground he cannot face down, even if he intends to
+
+Solution:
+ - change vertical_facing_ to intended_vertical_facing_
+ - introduce vertical_facing() and use this to:
+     1 - pass to gun's draw
+     2 - clean up spritestates

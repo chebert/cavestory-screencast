@@ -75,7 +75,7 @@ Player::Player(Graphics& graphics, units::Game x, units::Game y) :
    velocity_y_(0.0f),
    acceleration_x_(0),
    horizontal_facing_(LEFT),
-   vertical_facing_(HORIZONTAL),
+   intended_vertical_facing_(HORIZONTAL),
    on_ground_(false),
    jump_active_(false),
    interacting_(false),
@@ -101,7 +101,7 @@ void Player::update(units::MS elapsed_time_ms, const Map& map) {
 void Player::draw(Graphics& graphics) {
    if (spriteIsVisible()) {
       const bool gun_up = motionType() == WALKING && walking_animation_.stride() != STRIDE_MIDDLE;
-      polar_star_.draw(graphics, horizontal_facing_, vertical_facing_, gun_up, x_, y_);
+      polar_star_.draw(graphics, horizontal_facing_, vertical_facing(), gun_up, x_, y_);
       sprites_[getSpriteState()]->draw(graphics, x_, y_);
    }
 }
@@ -133,18 +133,18 @@ void Player::stopMoving() {
 
 void Player::lookUp() {
    interacting_ = false;
-   vertical_facing_ = UP;
+   intended_vertical_facing_ = UP;
    interacting_ = false;
 }
 
 void Player::lookDown() {
-   if (vertical_facing_ == DOWN) return;
-   vertical_facing_ = DOWN;
+   if (intended_vertical_facing_ == DOWN) return;
+   intended_vertical_facing_ = DOWN;
    interacting_ = on_ground();
 }
 
 void Player::lookHorizontal() {
-   vertical_facing_ = HORIZONTAL;
+   intended_vertical_facing_ = HORIZONTAL;
 }
 
 void Player::startJump() {
@@ -220,9 +220,16 @@ void Player::initializeSprite(Graphics& graphics,
       case LAST_MOTION_TYPE:
          break;
    }
-   tile_x = sprite_state.vertical_facing() == UP ?
-      tile_x + kUpFrameOffset :
-      tile_x;
+   switch (sprite_state.vertical_facing()) {
+      case HORIZONTAL: break;
+      case UP:
+         tile_x += kUpFrameOffset;
+         break;
+      case DOWN:
+         tile_x = kDownFrame;
+         break;
+      default: break;
+   }
 
    if (sprite_state.motion_type() == WALKING) {
       switch (sprite_state.stride_type()) {
@@ -243,10 +250,6 @@ void Player::initializeSprite(Graphics& graphics,
             units::tileToPixel(tile_x), units::tileToPixel(tile_y),
             units::tileToPixel(1), units::tileToPixel(1)));
    } else {
-      if (sprite_state.vertical_facing() == DOWN && 
-          (sprite_state.motion_type() == JUMPING || sprite_state.motion_type() == FALLING)) {
-         tile_x = kDownFrame;
-      }
       sprites_[sprite_state] =
          boost::shared_ptr<Sprite>(new Sprite(
             graphics,
@@ -272,7 +275,7 @@ Player::SpriteState Player::getSpriteState() {
    return boost::make_tuple(
          motionType(),
          horizontal_facing_,
-         vertical_facing_,
+         vertical_facing(),
          walking_animation_.stride()
          );
 }
