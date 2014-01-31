@@ -40,10 +40,6 @@ const units::Frame kUpFrameOffset = 3;
 const units::Frame kDownFrame = 6;
 const units::Frame kBackFrame = 7;
 
-// Walk Animation
-const units::Frame kNumWalkFrames = 3;
-const units::FPS kWalkFps = 15;
-
 // Collision Rectangle
 const Rectangle kCollisionX(6, 10,
                             20, 12);
@@ -96,13 +92,16 @@ void Player::update(units::MS elapsed_time_ms, const Map& map) {
    health_.update(elapsed_time_ms);
    damage_text_.update(elapsed_time_ms);
 
+   walking_animation_.update();
+
    updateX(elapsed_time_ms, map);
    updateY(elapsed_time_ms, map);
 }
 
 void Player::draw(Graphics& graphics) {
    if (spriteIsVisible()) {
-      polar_star_.draw(graphics, horizontal_facing_, vertical_facing_, x_, y_);
+      const bool gun_up = motionType() == WALKING && walking_animation_.stride() != STRIDE_MIDDLE;
+      polar_star_.draw(graphics, horizontal_facing_, vertical_facing_, gun_up, x_, y_);
       sprites_[getSpriteState()]->draw(graphics, x_, y_);
    }
 }
@@ -115,12 +114,14 @@ void Player::drawHUD(Graphics& graphics) {
 }
 
 void Player::startMovingLeft() {
+   if (on_ground() && acceleration_x_ == 0) walking_animation_.reset();
    acceleration_x_ = -1;
    horizontal_facing_ = LEFT;
    interacting_ = false;
 }
 
 void Player::startMovingRight() {
+   if (on_ground() && acceleration_x_ == 0) walking_animation_.reset();
    acceleration_x_ = 1;
    horizontal_facing_ = RIGHT;
    interacting_ = false;
@@ -182,9 +183,12 @@ void Player::initializeSprites(Graphics& graphics) {
    ENUM_FOREACH(motion, MOTION_TYPE) {
       ENUM_FOREACH(h_facing, HORIZONTAL_FACING) {
          ENUM_FOREACH(v_facing, VERTICAL_FACING) {
-            initializeSprite(graphics, boost::make_tuple((MotionType)motion,
-                                                         (HorizontalFacing)h_facing,
-                                                         (VerticalFacing)v_facing));
+            ENUM_FOREACH(stride_type, STRIDE_TYPE) {
+               initializeSprite(graphics, boost::make_tuple((MotionType)motion,
+                  (HorizontalFacing)h_facing,
+                  (VerticalFacing)v_facing,
+                  (StrideType)stride_type));
+            }
          }
       }
    }
@@ -221,13 +225,23 @@ void Player::initializeSprite(Graphics& graphics,
       tile_x;
 
    if (sprite_state.motion_type() == WALKING) {
+      switch (sprite_state.stride_type()) {
+         case STRIDE_MIDDLE:
+            break;
+         case STRIDE_LEFT:
+            tile_x += 1;
+            break;
+         case STRIDE_RIGHT:
+            tile_x += 2;
+            break;
+         default: break;
+      }
       sprites_[sprite_state] =
-         boost::shared_ptr<Sprite>(new AnimatedSprite(
+         boost::shared_ptr<Sprite>(new Sprite(
             graphics,
             kSpriteFilePath,
             units::tileToPixel(tile_x), units::tileToPixel(tile_y),
-            units::tileToPixel(1), units::tileToPixel(1),
-            kWalkFps, kNumWalkFrames));
+            units::tileToPixel(1), units::tileToPixel(1)));
    } else {
       if (sprite_state.vertical_facing() == DOWN && 
           (sprite_state.motion_type() == JUMPING || sprite_state.motion_type() == FALLING)) {
@@ -242,7 +256,7 @@ void Player::initializeSprite(Graphics& graphics,
    }
 }
 
-Player::SpriteState Player::getSpriteState() {
+Player::MotionType Player::motionType() const {
    MotionType motion;
    if (interacting_) {
       motion = INTERACTING;
@@ -251,10 +265,15 @@ Player::SpriteState Player::getSpriteState() {
    } else {
       motion = velocity_y_ < 0.0f ? JUMPING : FALLING;
    }
+   return motion;
+}
+
+Player::SpriteState Player::getSpriteState() {
    return boost::make_tuple(
-         motion,
+         motionType(),
          horizontal_facing_,
-         vertical_facing_
+         vertical_facing_,
+         walking_animation_.stride()
          );
 }
 
