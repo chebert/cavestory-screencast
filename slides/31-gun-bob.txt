@@ -1,0 +1,27 @@
+Episode 31 - Gun Bob/Oscillating Walk
+=====================================
+
+Problem:
+ 1 - We want a gun bob, synced with our player walk animation.
+ 2 - Player animation is wrong!
+  While we have been looping
+    Mid Stride (standing)
+    Left Stride
+    Right Stride
+    Mid/Left/Right/ Mid/Left/Right/ Mid/Left/Right ...
+  It should oscillate between
+    Left Stride
+    Mid Stride (standing)
+    Right Stride
+    Left/Mid/Right/Mid Left/Mid/Right/Mid
+
+Why does it matter?
+ - Our gun bob is synced to our walk stride: gun bobs up for left/right, down for mid
+ - it looks weird to have it up two frames down one (should be every other)
+
+Solution:
+ - NOT an animated sprite (which is still valid for our first_cave_bat)
+ - Walking animation which animates a StrideType enum
+   - private class to player
+   - replacing current walk AnimatedSprite with three static sprites and a StrideType
+   - this is so we can sync our gun bob (we need to know more info than a sprite can provide)

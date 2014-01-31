@@ -48,14 +48,35 @@ struct Player {
       FALLING,
       LAST_MOTION_TYPE
    };
+   enum StrideType {
+      FIRST_STRIDE_TYPE,
+      STRIDE_MIDDLE = FIRST_STRIDE_TYPE,
+      STRIDE_LEFT,
+      STRIDE_RIGHT,
+      LAST_STRIDE_TYPE
+   };
 
-   typedef boost::tuple<MotionType, HorizontalFacing, VerticalFacing> SpriteTuple;
+   typedef boost::tuple<MotionType, HorizontalFacing, VerticalFacing, StrideType> SpriteTuple;
    struct SpriteState : public SpriteTuple {
       SpriteState(const SpriteTuple& tuple) : SpriteTuple(tuple) {}
 
       MotionType motion_type() const { return get<0>(); }
       HorizontalFacing horizontal_facing() const { return get<1>(); }
       VerticalFacing vertical_facing() const { return get<2>(); }
+      StrideType stride_type() const { return get<3>(); }
+   };
+
+   struct WalkingAnimation {
+      WalkingAnimation();
+
+      void update();
+      void reset();
+
+      StrideType stride() const;
+     private:
+      Timer frame_timer_;
+      units::Frame current_frame_;
+      bool forward_;
    };
 
    struct Health {
@@ -94,6 +115,7 @@ struct Player {
 
    bool spriteIsVisible() const;
 
+   MotionType motionType() const;
    bool on_ground() const { return on_ground_; }
 
    units::Game x_, y_;
@@ -108,6 +130,8 @@ struct Player {
    Health health_;
    Timer invincible_timer_;
    DamageText damage_text_;
+
+   WalkingAnimation walking_animation_;
 
    PolarStar polar_star_;
 
