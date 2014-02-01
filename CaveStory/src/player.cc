@@ -27,7 +27,7 @@ const units::Acceleration kAirAcceleration = 0.0003125f;
 const units::Acceleration kJumpGravity = 0.0003125f;
 
 // Sprites
-const std::string kSpriteFilePath("../content/MyChar.bmp");
+const std::string kSpriteFilePath("MyChar");
 
 // Sprite Frames
 const units::Frame kCharacterFrame = 0;

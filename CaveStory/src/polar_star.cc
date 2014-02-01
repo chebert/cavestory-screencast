@@ -14,7 +14,7 @@ const units::Tile kDownOffset = 4;
 const units::Tile kLeftOffset = 0;
 const units::Tile kRightOffset = 1;
 
-const std::string kSpritePath("../content/Arms.bmp");
+const std::string kSpritePath("Arms");
 }
 
 PolarStar::PolarStar(Graphics& graphics) {

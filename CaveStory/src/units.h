@@ -2,6 +2,7 @@
 #define UNITS_H_
 
 #include <cmath>
+#include "config.h"
 
 namespace units {
 
@@ -32,8 +33,9 @@ inline double degreesToRadians(Degrees degrees) {
 }
 
 inline Pixel gameToPixel(Game game) {
-   // TODO: quit assuming 32x32
-   return Pixel(round(game));
+   return config::getGraphicsQuality() == config::HIGH_QUALITY ?
+      Pixel(round(game)) :
+      Pixel(round(game / 2));
 }
 
 inline Tile gameToTile(Game game) {

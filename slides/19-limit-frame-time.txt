@@ -1,0 +1,8 @@
+Episode 19 - Limit Frame Time
+=============================
+
+Problem?
+
+Solution Ideas:
+ 1) Create a frame time cap
+ 2) watch for Windows events and keep track of a pause timer

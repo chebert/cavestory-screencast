@@ -1,0 +1,12 @@
+Episode 33 - Image Paths
+========================
+
+Problem:
+ 1 - I don't want to use the content path everytime I create a sprite
+ 2 - I want an easier way to switch between hi-res graphics and original-res graphics (in code only)
+
+Solution:
+ - instead of calling graphics.loadImage with "../content/NpcCemet.bmp", just
+   call it with "NpcCemet"
+ - config file with just:
+  - GraphicsQuality
