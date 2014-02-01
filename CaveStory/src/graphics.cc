@@ -31,6 +31,10 @@ Graphics::SurfaceID Graphics::loadImage(const std::string& file_path, bool black
    if (sprite_sheets_.count(file_path) == 0) {
       // load it in now
       sprite_sheets_[file_path] = SDL_LoadBMP(file_path.c_str());
+      if (sprite_sheets_[file_path] == NULL) {
+         fprintf(stderr, "Could not find image: %s\n", file_path.c_str());
+         exit(EXIT_FAILURE);
+      }
       if (black_is_transparent) {
          const Uint32 black_color = SDL_MapRGB(sprite_sheets_[file_path]->format, 0, 0, 0);
          SDL_SetColorKey(sprite_sheets_[file_path], SDL_SRCCOLORKEY, black_color);
