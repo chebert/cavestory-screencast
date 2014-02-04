@@ -6,3 +6,5 @@ CaveStory/Debug
 gen/
 content/
 CaveStory.sln
+obj/
+.depend
