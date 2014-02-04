@@ -3,7 +3,7 @@
 namespace config {
 
 GraphicsQuality getGraphicsQuality() {
-   return ORIGINAL_QUALITY;
+   return HIGH_QUALITY;
 }
 
 }
