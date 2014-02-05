@@ -11,6 +11,7 @@ struct Sprite;
 struct PolarStar {
    PolarStar(Graphics& graphics);
 
+   void updateProjectiles(units::MS elapsed_time);
    void draw(
       Graphics& graphics,
       HorizontalFacing horizontal_facing, VerticalFacing vertical_facing,
@@ -21,6 +22,7 @@ struct PolarStar {
                   HorizontalFacing horizontal_facing, VerticalFacing vertical_facing,
                   bool gun_up);
    void stopFire() {}
+
   private:
    typedef boost::tuple<HorizontalFacing, VerticalFacing> SpriteTuple;
    struct SpriteState : public SpriteTuple {
@@ -35,6 +37,8 @@ struct PolarStar {
                  VerticalFacing vertical_direction,
                  units::Game x, units::Game y);
 
+      // Returns true if |this| are alive.
+      bool update(units::MS elapsed_time);
       void draw(Graphics& graphics);
 
      private:
@@ -56,7 +60,8 @@ struct PolarStar {
    boost::shared_ptr<Sprite> horizontal_projectile_;
    boost::shared_ptr<Sprite> vertical_projectile_;
 
-   boost::shared_ptr<Projectile> projectile_;
+   boost::shared_ptr<Projectile> projectile_a_;
+   boost::shared_ptr<Projectile> projectile_b_;
 };
 
 #endif // POLAR_STAR_H_

@@ -1,0 +1,17 @@
+Episode 36 - Projectiles Have a Life Span
+=========================================
+
+Problems:
+ 1 - Projectiles need to move in the direction they are fired.
+ 2 - Projectiles need to be removed when they reach the end of their lifespan
+    - approx. 3.5 tiles
+ 3 - Polar Star limited 2 projectiles onscreen at any one time
+
+Solution:
+ 1 - update(elapsed_time)
+     - velocity approximately 0.6f G.U./ms
+     - if offset > 3.5, delete
+
+ 2 - startFire()
+     - 2 projectiles
+     - if both projectile slots are taken, don't fire.
