@@ -12,7 +12,7 @@ struct AnimatedSprite : public Sprite {
          units::Pixel width, units::Pixel height,
          units::FPS fps, units::Frame num_frames);
 
-   void update(units::MS elapsed_time_ms);
+   void update();
 
   private:
    Timer frame_timer_;

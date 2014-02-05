@@ -9,7 +9,7 @@ OBJECTS=$(patsubst %.cc,$(OBJDIR)/%.o,$(SRCS))
 #  or valgrind)
 # -Wall=Give me all warnings!
 # -Wextra=Give me extra warnings!
-CFLAGS=-g -Wall -Wextra
+CFLAGS=-g -Wall -Wextra -std=c++03
 # LDLIBS (Load Libraries)
 # External libraries you are using that need to be linked.
 LDLIBS=`sdl-config --cflags --libs`

@@ -76,17 +76,6 @@ vector<Map::CollisionTile> Map::getCollidingTiles(const Rectangle& rectangle) co
    return collision_tiles;   
 }
 
-
-void Map::update(units::MS elapsed_time_ms) {
-   for (size_t row = 0; row < tiles_.size(); ++row) {
-      for (size_t col = 0; col < tiles_[row].size(); ++col) {
-         if (tiles_[row][col].sprite) {
-            tiles_[row][col].sprite->update(elapsed_time_ms);
-         }
-      }
-   }
-}
-
 void Map::drawBackground(Graphics& graphics) const {
    backdrop_->draw(graphics);
    for (size_t row = 0; row < background_tiles_.size(); ++row) {
