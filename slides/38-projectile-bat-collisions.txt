@@ -1,0 +1,19 @@
+Episode 38 - Projectile/Bat Collisions
+======================================
+
+Problem:
+ - Our projectiles should collide with the bat.
+  - Sub problem. where to do the collision check?
+
+Solution:
+ - Collision check in Game::update
+Alternatives:
+   - Could do it in the enemy class?
+   - Could do it in the projectile class?
+   - Could (and probably will) make a new class/namespace to handle collisions
+
+ - Collision check in Game::update
+   - need a Projectile interface
+      - collisionRectangle()
+      - contactDamage()
+   - vector<Projectile> Player::getProjectiles()

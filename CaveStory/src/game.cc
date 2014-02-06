@@ -116,6 +116,14 @@ void Game::update(units::MS elapsed_time_ms) {
 
    bat_->update(elapsed_time_ms, player_->center_x());
 
+   std::vector<boost::shared_ptr<Projectile> > projectiles(player_->getProjectiles());
+   for (size_t i = 0; i < projectiles.size(); ++i) {
+      if (bat_->collisionRectangle().collidesWith(projectiles[i]->collisionRectangle())) {
+         bat_->takeDamage(projectiles[i]->contactDamage());
+         projectiles[i]->collideWithEnemy();
+      }
+   }
+
    if (bat_->damageRectangle().collidesWith(player_->damageRectangle())) {
       player_->takeDamage(bat_->contactDamage());
    }

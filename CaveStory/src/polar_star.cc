@@ -133,6 +133,13 @@ void PolarStar::startFire(units::Game player_x, units::Game player_y,
    }
 }
 
+std::vector<boost::shared_ptr<Projectile> > PolarStar::getProjectiles() {
+   std::vector<boost::shared_ptr< ::Projectile> > projectiles;
+   if (projectile_a_) projectiles.push_back(projectile_a_);
+   if (projectile_b_) projectiles.push_back(projectile_b_);
+   return projectiles;
+}
+
 void PolarStar::initializeSprites(Graphics& graphics) {
    horizontal_projectile_.reset(new Sprite(
       graphics, "Bullet",
@@ -177,7 +184,8 @@ PolarStar::Projectile::Projectile(boost::shared_ptr<Sprite> sprite,
    horizontal_direction_(horizontal_direction),
    vertical_direction_(vertical_direction),
    x_(x), y_(y),
-   offset_(0) {}
+   offset_(0),
+   alive_(true) {}
 
 bool PolarStar::Projectile::update(units::MS elapsed_time, const Map& map) {
    offset_ += kProjectileSpeed * elapsed_time;
@@ -190,7 +198,7 @@ bool PolarStar::Projectile::update(units::MS elapsed_time, const Map& map) {
       }
    }
 
-   return offset_ < kProjectileMaxOffset;
+   return alive_ && offset_ < kProjectileMaxOffset;
 }
 
 Rectangle PolarStar::Projectile::collisionRectangle() const {
