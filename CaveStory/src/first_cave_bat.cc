@@ -14,7 +14,7 @@ const units::HP kContactDamage = 1;
 }
 
 FirstCaveBat::FirstCaveBat(Graphics& graphics, units::Game x, units::Game y) :
-   center_y_(y),
+   flight_center_y_(y),
    x_(x),
    y_(y),
    flight_angle_(0.0f),
@@ -23,18 +23,20 @@ FirstCaveBat::FirstCaveBat(Graphics& graphics, units::Game x, units::Game y) :
    initializeSprites(graphics);
 }
 
-void FirstCaveBat::draw(Graphics& graphics) const {
+void FirstCaveBat::draw(Graphics& graphics) {
    sprites_.at(getSpriteState())->draw(graphics, x_, y_);
+   damage_text_.draw(graphics, center_x(), center_y());
 }
 
 void FirstCaveBat::update(units::MS elapsed_time, units::Game player_x) {
    flight_angle_ += kAngularVelocity * elapsed_time;
+   damage_text_.update(elapsed_time);
 
    facing_ = x_ + units::kHalfTile > player_x ?
       LEFT :
       RIGHT;
 
-   y_ = center_y_ +
+   y_ = flight_center_y_ +
       kFlightAmplitude * units::Game(std::sin(units::degreesToRadians(flight_angle_)));
 
    sprites_[getSpriteState()]->update();

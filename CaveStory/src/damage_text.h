@@ -13,6 +13,7 @@ struct DamageText {
    void update(units::MS elapsed_time);
    void draw(Graphics& graphics, units::Game center_x, units::Game center_y);
   private:
+   bool should_rise_;
    units::HP damage_;
    units::Game offset_y_;
    Timer timer_;

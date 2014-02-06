@@ -1,0 +1,15 @@
+Episode 39 - Damage Text Revisited
+==================================
+
+Problem:
+ - Damage Text needs to add damage.
+ - also let's give damage text to our bat
+
+Details:
+ - first hit:
+    - reads "-1"
+    - starts floating upward
+ - subsequent hits:
+    - damage text decreases by -1
+    - STOPS floating upward
+ - disappears 2 seconds after last hit
