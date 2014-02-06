@@ -12,6 +12,7 @@
 #include "polar_star.h"
 
 struct Graphics;
+struct Projectile;
 struct Map;
 
 struct Player {
@@ -29,6 +30,9 @@ struct Player {
    void lookDown();
    void lookHorizontal();
 
+   void startFire();
+   void stopFire();
+
    void startJump();
    void stopJump();
 
@@ -37,6 +41,9 @@ struct Player {
    Rectangle damageRectangle() const; 
    units::Game center_x() const { return x_ + units::kHalfTile; }
    units::Game center_y() const { return y_ + units::kHalfTile; }
+
+   std::vector<boost::shared_ptr<Projectile> > getProjectiles()
+      { return polar_star_.getProjectiles(); }
 
   private:
    enum MotionType {
@@ -82,7 +89,7 @@ struct Player {
    struct Health {
       Health(Graphics& graphics);
 
-      void update(units::MS elapsed_time);
+      void update();
       void draw(Graphics& graphics);
 
       // returns true if we have died.
@@ -117,12 +124,18 @@ struct Player {
 
    MotionType motionType() const;
    bool on_ground() const { return on_ground_; }
+   bool gun_up() const
+      { return motionType() == WALKING && walking_animation_.stride() != STRIDE_MIDDLE; }
+   VerticalFacing vertical_facing() const {
+      return on_ground() && intended_vertical_facing_ == DOWN ?
+               HORIZONTAL : intended_vertical_facing_;
+   }
 
    units::Game x_, y_;
    units::Velocity velocity_x_, velocity_y_;
    int acceleration_x_;
    HorizontalFacing horizontal_facing_;
-   VerticalFacing vertical_facing_;
+   VerticalFacing intended_vertical_facing_;
    bool on_ground_;
    bool jump_active_;
    bool interacting_;

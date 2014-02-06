@@ -1,0 +1,15 @@
+Episode 35 - Fire a Projectile
+==============================
+
+Problem:
+ - Polar Star should fire projectile when the player presses "x"
+
+Solution:
+ - Level1Projectile class
+  - private to PolarStar, but we'll talk about this more soon.
+  - update(elapsed_time) so that it can move
+  - draw
+  - start_x, start_y
+  - HorizontalFacing, VerticalFacing, offset
+
+ - fire button (implementation is identical to jump button)

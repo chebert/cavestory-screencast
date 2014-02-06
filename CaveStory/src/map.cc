@@ -12,7 +12,7 @@ using std::vector;
 Map* Map::createTestMap(Graphics& graphics) {
    Map* map = new Map();
 
-   map->backdrop_.reset(new FixedBackdrop("../content/bkBlue.bmp", graphics));
+   map->backdrop_.reset(new FixedBackdrop("bkBlue", graphics));
    const units::Tile num_rows = 15;
    const units::Tile num_cols = 20;
    // Ensure tiles_ and background_tiles_ are num_rows x num_cols in size
@@ -25,7 +25,7 @@ Map* Map::createTestMap(Graphics& graphics) {
 
    shared_ptr<Sprite> sprite(new Sprite(
             graphics,
-            "../content/PrtCave.bmp",
+            "PrtCave",
             units::tileToPixel(1), 0,
             units::tileToPixel(1), units::tileToPixel(1)));
    Tile tile(WALL_TILE, sprite);
@@ -41,17 +41,17 @@ Map* Map::createTestMap(Graphics& graphics) {
 
    shared_ptr<Sprite> chain_top(new Sprite(
       graphics,
-      "../content/PrtCave.bmp",
+      "PrtCave",
       units::tileToPixel(11), units::tileToPixel(2),
       units::tileToPixel(1), units::tileToPixel(1)));
    shared_ptr<Sprite> chain_middle(new Sprite(
       graphics,
-      "../content/PrtCave.bmp",
+      "PrtCave",
       units::tileToPixel(12), units::tileToPixel(2),
       units::tileToPixel(1), units::tileToPixel(1)));
    shared_ptr<Sprite> chain_bottom(new Sprite(
       graphics,
-      "../content/PrtCave.bmp",
+      "PrtCave",
       units::tileToPixel(13), units::tileToPixel(2),
       units::tileToPixel(1), units::tileToPixel(1)));
 
@@ -74,17 +74,6 @@ vector<Map::CollisionTile> Map::getCollidingTiles(const Rectangle& rectangle) co
       }
    }
    return collision_tiles;   
-}
-
-
-void Map::update(units::MS elapsed_time_ms) {
-   for (size_t row = 0; row < tiles_.size(); ++row) {
-      for (size_t col = 0; col < tiles_[row].size(); ++col) {
-         if (tiles_[row][col].sprite) {
-            tiles_[row][col].sprite->update(elapsed_time_ms);
-         }
-      }
-   }
 }
 
 void Map::drawBackground(Graphics& graphics) const {

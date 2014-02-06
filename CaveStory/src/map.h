@@ -29,7 +29,6 @@ struct Map {
 
    std::vector<CollisionTile> getCollidingTiles(const Rectangle& rectangle) const;
 
-   void update(units::MS elapsed_time_ms);
    void drawBackground(Graphics& graphics) const;
    void draw(Graphics& graphics) const;
 
@@ -39,7 +38,6 @@ struct Map {
            boost::shared_ptr<Sprite> sprite = boost::shared_ptr<Sprite>()) :
          tile_type(tile_type),
          sprite(sprite) {}
-         
       TileType tile_type;
       boost::shared_ptr<Sprite> sprite;
    };

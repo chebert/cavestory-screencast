@@ -1,0 +1,27 @@
+Episode 34 - Placing the Polar Star Projectile
+==============================================
+
+Problem:
+ - Where do we fire the Polar Star's projectiles from?
+
+Solution:
+ - Find the nozzle of our gun. 
+ Measured from the top-left of our gunsprite
+   HORIZONTAL      : y=23 Game Units
+   HORIZONTAL LEFT : x=10 Game Units
+   HORIZONTAL RIGHT: x=38 Game Units
+
+   UP              : y=4  Game Units
+   UP LEFT         : x=27 Game Units
+   UP RIGHT        : x=21 Game Units
+
+   DOWN            : y=28 Game Units
+   DOWN LEFT       : x=29 Game Units
+   DOWN RIGHT      : x=19 Game Units
+
+ - Find Polar Star Projectile
+  "Bullet"
+  - HORIZONTAL    : x=8 Tiles 
+  - not HORIZONTAL: x=9 Tiles 
+  - y=2 Tiles
+  - WxH=1x1 Tiles

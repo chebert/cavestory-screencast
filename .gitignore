@@ -1,3 +1,10 @@
+CaveStory.*
+CaveStory/CaveStory.*
+Debug/
+gen/
+CaveStory/Debug
 gen/
 content/
 CaveStory.sln
+obj/
+.depend

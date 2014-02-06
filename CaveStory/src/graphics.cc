@@ -26,7 +26,10 @@ Graphics::~Graphics() {
    SDL_FreeSurface(screen_);
 }
 
-Graphics::SurfaceID Graphics::loadImage(const std::string& file_path, bool black_is_transparent) {
+Graphics::SurfaceID Graphics::loadImage(const std::string& file_name, bool black_is_transparent) {
+   const std::string file_path = config::getGraphicsQuality() == config::ORIGINAL_QUALITY ?
+      "../content/original_graphics/" + file_name + ".pbm" :
+      "../content/" + file_name + ".bmp";
    // if we have not loaded in the spritesheet
    if (sprite_sheets_.count(file_path) == 0) {
       // load it in now

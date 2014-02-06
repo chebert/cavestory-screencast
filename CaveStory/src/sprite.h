@@ -10,11 +10,11 @@ struct Graphics;
 
 struct Sprite {
    Sprite(Graphics& graphics,
-          const std::string& file_path,
+          const std::string& file_name,
           units::Pixel source_x, units::Pixel source_y,
           units::Pixel width, units::Pixel height);
 
-   virtual void update(units::MS) {}
+   virtual void update() {}
    void draw(Graphics& graphics, units::Game x, units::Game y);
 
   protected:
