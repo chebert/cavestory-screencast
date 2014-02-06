@@ -4,14 +4,16 @@
 #include "sprite_state.h"
 
 #include "units.h"
+#include "rectangle.h"
 
 struct Graphics;
+struct Map;
 struct Sprite;
 
 struct PolarStar {
    PolarStar(Graphics& graphics);
 
-   void updateProjectiles(units::MS elapsed_time);
+   void updateProjectiles(units::MS elapsed_time, const Map& map);
    void draw(
       Graphics& graphics,
       HorizontalFacing horizontal_facing, VerticalFacing vertical_facing,
@@ -38,10 +40,14 @@ struct PolarStar {
                  units::Game x, units::Game y);
 
       // Returns true if |this| are alive.
-      bool update(units::MS elapsed_time);
+      bool update(units::MS elapsed_time, const Map& map);
       void draw(Graphics& graphics);
 
      private:
+      Rectangle collisionRectangle() const;
+      units::Game getX() const;
+      units::Game getY() const;
+
       boost::shared_ptr<Sprite> sprite_;
       const HorizontalFacing horizontal_direction_;
       const VerticalFacing vertical_direction_;
