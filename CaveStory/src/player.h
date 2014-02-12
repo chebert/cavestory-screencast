@@ -9,13 +9,14 @@
 #include "units.h"
 #include "timer.h"
 #include "damage_text.h"
+#include "damageable.h"
 #include "polar_star.h"
 
 struct Graphics;
 struct Projectile;
 struct Map;
 
-struct Player {
+struct Player : public Damageable {
    Player(Graphics& graphics, units::Game x, units::Game y);
 
    void update(units::MS elapsed_time_ms, const Map& map);
@@ -41,6 +42,7 @@ struct Player {
    Rectangle damageRectangle() const; 
    units::Game center_x() const { return x_ + units::kHalfTile; }
    units::Game center_y() const { return y_ + units::kHalfTile; }
+   boost::shared_ptr<DamageText> get_damage_text() { return damage_text_; }
 
    std::vector<boost::shared_ptr<Projectile> > getProjectiles()
       { return polar_star_.getProjectiles(); }
@@ -142,7 +144,7 @@ struct Player {
 
    Health health_;
    Timer invincible_timer_;
-   DamageText damage_text_;
+   boost::shared_ptr<DamageText> damage_text_;
 
    WalkingAnimation walking_animation_;
 

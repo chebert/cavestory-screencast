@@ -1,0 +1,23 @@
+Episode 40 - Damage Texts
+=========================
+
+Problem:
+ - Damage Texts needs to outlive their owners
+ - Damage Texts need to be drawn pretty close to last (but still before the HUD)
+
+Solution:
+ - DamageTexts class to own/update/draw all damage texts
+ - Damageable: anything that can have a damage text (Player/enemy)
+ 
+ Ideas?
+ - map from shared_ptr<DamageText> -> Damageable*
+	- every update, set DamageText's position to Damageable's position
+	- Problem: how do we know that Damageable is exists?
+ 
+ - Weak Ptr
+   - works with shared_ptrs, but not scoped_ptrs
+   - not even really a pointer. just lets you know how many shared_ptr owners there are for a given pointer
+	  - vocab: reference count (or ref_count): the number of shared_ptr owners there are for a given pointer
+   - need to be converted to a shared_ptr before use.
+
+ - map from shared_ptr<DamageText> -> weak_ptr<Damageable>
