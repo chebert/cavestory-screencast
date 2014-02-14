@@ -6,6 +6,7 @@
 
 #include "units.h"
 #include "damage_texts.h"
+#include "head_bump_particle.h"
 
 struct Map;
 struct Player;
@@ -26,6 +27,7 @@ struct Game {
    boost::shared_ptr<Player> player_;
    boost::shared_ptr<FirstCaveBat> bat_;
    boost::scoped_ptr<Map> map_;
+   boost::scoped_ptr<HeadBumpParticle> particle_;
    DamageTexts damage_texts_;
 };
 

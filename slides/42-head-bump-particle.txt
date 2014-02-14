@@ -1,0 +1,19 @@
+Episode 42 - Head Bump Particle
+===============================
+
+Problem:
+ - Small particle effect when Quote bumps his head
+
+Solution:
+ - We have implemented a lot of this before:
+  - 2 Sprites
+  - "Caret.bmp"
+    - x=116 GU
+	- y=54 GU
+	- w=h=6 GU
+  - move outward from a central point (center_x(), top())
+  - speed=0.12 GU/ms
+  - random angles [0, 360) Degrees
+  - random distances [4, 20] Game Units
+  - Flash period=25 ms
+  - particles expire after 600 ms
