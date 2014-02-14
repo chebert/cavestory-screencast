@@ -46,6 +46,13 @@ const Rectangle kCollisionX(6, 10,
 const Rectangle kCollisionY(10, 2,
                             12, 30);
 
+const units::Game kCollisionYTop = 2;
+const units::Game kCollisionYHeight = 30;
+const units::Game kCollisionTopWidth = 18;
+const units::Game kCollisionBottomWidth = 10;
+const units::Game kCollisionTopLeft = (units::tileToGame(1) - kCollisionTopWidth) / 2;
+const units::Game kCollisionBottomLeft = (units::tileToGame(1) - kCollisionBottomWidth) / 2;
+
 const units::MS kInvincibleFlashTime = 50;
 const units::MS kInvincibleTime = 3000;
 
@@ -179,9 +186,9 @@ void Player::takeDamage(units::HP damage) {
 
 Rectangle Player::damageRectangle() const {
    return Rectangle(x_ + kCollisionX.left(),
-                    y_ + kCollisionY.top(),
+                    y_ + kCollisionYTop,
                     kCollisionX.width(),
-                    kCollisionY.height());
+                    kCollisionYHeight);
 }
 
 void Player::initializeSprites(Graphics& graphics) {
@@ -308,20 +315,20 @@ Rectangle Player::rightCollision(units::Game delta) const {
 Rectangle Player::topCollision(units::Game delta) const {
    assert(delta <= 0);
    return Rectangle(
-      x_ + kCollisionY.left(),
-      y_ + kCollisionY.top() + delta,
-      kCollisionY.width(),
-      kCollisionY.height() / 2 - delta
+      x_ + kCollisionTopLeft,
+      y_ + kCollisionYTop + delta,
+      kCollisionTopWidth,
+      kCollisionYHeight / 2 - delta
       );
 }
 
 Rectangle Player::bottomCollision(units::Game delta) const {
    assert(delta >= 0);
    return Rectangle(
-      x_ + kCollisionY.left(),
-      y_ + kCollisionY.top() + kCollisionY.height() / 2,
-      kCollisionY.width(),
-      kCollisionY.height() / 2 + delta
+      x_ + kCollisionBottomLeft,
+      y_ + kCollisionYTop + kCollisionYHeight / 2,
+      kCollisionBottomWidth,
+      kCollisionYHeight / 2 + delta
       );
 }
 
@@ -393,7 +400,7 @@ void Player::updateY(units::MS elapsed_time_ms, const Map& map) {
       CollisionInfo info = getWallCollisionInfo(map, bottomCollision(delta));
       // React to collision
       if (info.collided) {
-         y_ = units::tileToGame(info.row) - kCollisionY.bottom();
+         y_ = units::tileToGame(info.row) - (kCollisionYTop + kCollisionYHeight);
          velocity_y_ = 0.0f;
          on_ground_ = true;
       } else {
@@ -404,13 +411,13 @@ void Player::updateY(units::MS elapsed_time_ms, const Map& map) {
       // Check collision in other direction.
       info = getWallCollisionInfo(map, topCollision(0));
       if (info.collided) {
-         y_ = units::tileToGame(info.row) + kCollisionY.height();
+         y_ = units::tileToGame(info.row) + kCollisionYHeight;
       }
    } else {
       CollisionInfo info = getWallCollisionInfo(map, topCollision(delta));
       // React to collision
       if (info.collided) {
-         y_ = units::tileToGame(info.row) + kCollisionY.height();
+         y_ = units::tileToGame(info.row) + kCollisionYHeight;
          velocity_y_ = 0.0f;
       }
       else {
@@ -421,7 +428,7 @@ void Player::updateY(units::MS elapsed_time_ms, const Map& map) {
       // Check collision in other direction.
       info = getWallCollisionInfo(map, bottomCollision(0));
       if (info.collided) {
-         y_ = units::tileToGame(info.row) - kCollisionY.bottom();
+         y_ = units::tileToGame(info.row) - (kCollisionYTop + kCollisionYHeight);
          on_ground_ = true;
       }
    }
