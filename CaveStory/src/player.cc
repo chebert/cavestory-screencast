@@ -7,6 +7,8 @@
 #include "map.h"
 #include "rectangle.h"
 #include "number_sprite.h"
+#include "particle_system.h"
+#include "head_bump_particle.h"
 
 #include <cmath>
 
@@ -94,7 +96,7 @@ Player::Player(Graphics& graphics, units::Game x, units::Game y) :
    initializeSprites(graphics);
 }
 
-void Player::update(units::MS elapsed_time_ms, const Map& map) {
+void Player::update(units::MS elapsed_time_ms, const Map& map, ParticleTools& particle_tools) {
    health_.update();
 
    walking_animation_.update();
@@ -102,7 +104,7 @@ void Player::update(units::MS elapsed_time_ms, const Map& map) {
    polar_star_.updateProjectiles(elapsed_time_ms, map);
 
    updateX(elapsed_time_ms, map);
-   updateY(elapsed_time_ms, map);
+   updateY(elapsed_time_ms, map, particle_tools);
 }
 
 void Player::draw(Graphics& graphics) {
@@ -389,7 +391,7 @@ void Player::updateX(units::MS elapsed_time_ms, const Map& map) {
    }
 }
 
-void Player::updateY(units::MS elapsed_time_ms, const Map& map) {
+void Player::updateY(units::MS elapsed_time_ms, const Map& map, ParticleTools& particle_tools) {
    // Update Velocity
    const units::Acceleration gravity = jump_active_ && velocity_y_ < 0.0f ? kJumpGravity : kGravity;
    velocity_y_ = std::min(velocity_y_ + gravity * elapsed_time_ms, kMaxSpeedY);
@@ -412,12 +414,16 @@ void Player::updateY(units::MS elapsed_time_ms, const Map& map) {
       info = getWallCollisionInfo(map, topCollision(0));
       if (info.collided) {
          y_ = units::tileToGame(info.row) + kCollisionYHeight;
+         particle_tools.system.addNewParticle(boost::shared_ptr<Particle>(
+            new HeadBumpParticle(particle_tools.graphics, center_x(), y_ + kCollisionYTop)));
       }
    } else {
       CollisionInfo info = getWallCollisionInfo(map, topCollision(delta));
       // React to collision
       if (info.collided) {
          y_ = units::tileToGame(info.row) + kCollisionYHeight;
+         particle_tools.system.addNewParticle(boost::shared_ptr<Particle>(
+            new HeadBumpParticle(particle_tools.graphics, center_x(), y_ + kCollisionYTop)));
          velocity_y_ = 0.0f;
       }
       else {

@@ -41,7 +41,6 @@ void Game::eventLoop() {
    bat_.reset(new FirstCaveBat(graphics, units::tileToGame(7), units::tileToGame(kScreenHeight / 2 + 1)));
    damage_texts_.addDamageable(bat_);
    map_.reset(Map::createTestMap(graphics));
-   particle_.reset(new HeadBumpParticle(graphics, units::tileToGame(kScreenWidth) / 2, units::tileToGame(kScreenHeight) / 2));
 
    bool running = true;
    units::MS last_update_time = SDL_GetTicks();
@@ -103,7 +102,7 @@ void Game::eventLoop() {
 
       const units::MS current_time_ms = SDL_GetTicks();
       const units::MS elapsed_time = current_time_ms - last_update_time;
-      update(std::min(elapsed_time, kMaxFrameTime));
+      update(std::min(elapsed_time, kMaxFrameTime), graphics);
       last_update_time = current_time_ms;
 
       draw(graphics);
@@ -115,12 +114,13 @@ void Game::eventLoop() {
    }
 }
 
-void Game::update(units::MS elapsed_time_ms) {
+void Game::update(units::MS elapsed_time_ms, Graphics& graphics) {
    Timer::updateAll(elapsed_time_ms);
    damage_texts_.update(elapsed_time_ms);
-   particle_->update(elapsed_time_ms);
+   particle_system_.update(elapsed_time_ms);
 
-   player_->update(elapsed_time_ms, *map_);
+   ParticleTools particle_tools = { particle_system_, graphics };
+   player_->update(elapsed_time_ms, *map_, particle_tools);
    if (bat_) {
       if (!bat_->update(elapsed_time_ms, player_->center_x()))
          bat_.reset();
@@ -147,7 +147,7 @@ void Game::draw(Graphics& graphics) {
       bat_->draw(graphics);
    player_->draw(graphics);
    map_->draw(graphics);
-   particle_->draw(graphics);
+   particle_system_.draw(graphics);
 
    damage_texts_.draw(graphics);
    player_->drawHUD(graphics);
