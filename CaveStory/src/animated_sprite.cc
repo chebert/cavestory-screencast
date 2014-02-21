@@ -11,7 +11,8 @@ AnimatedSprite::AnimatedSprite(
    Sprite(graphics, file_name, source_x, source_y, width, height),
    frame_timer_(1000 / fps),
    num_frames_(num_frames),
-   current_frame_(0)
+   current_frame_(0),
+   num_completed_loops_(0)
 {
 }
 
@@ -24,6 +25,7 @@ void AnimatedSprite::update() {
       } else {
          source_rect_.x -= source_rect_.w * (num_frames_ - 1);
          current_frame_ = 0;
+         ++num_completed_loops_;
       }
    }
 }
