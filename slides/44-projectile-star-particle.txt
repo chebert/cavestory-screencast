@@ -1,0 +1,16 @@
+Episode 44 - Projectile-Star Particle
+=====================================
+
+Problem:
+ - Particle effect: Projectile Star
+ - Appears when projectile is created, and when it destroys itself
+
+Sub-problem:
+ - Animated Sprite needs to say how many times it has looped through
+
+Solution:
+ - AnimatedSprite:
+ - "Caret" 
+   x=0, y=3
+   w=1, h=1
+   fps=18, num_frames=4
