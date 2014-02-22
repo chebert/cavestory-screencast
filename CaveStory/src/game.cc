@@ -10,6 +10,7 @@
 #include "input.h"
 #include "first_cave_bat.h"
 #include "timer.h"
+#include "projectile_wall_particle.h"
 
 namespace {
 const units::FPS kFps = 60;
@@ -41,6 +42,9 @@ void Game::eventLoop() {
    bat_.reset(new FirstCaveBat(graphics, units::tileToGame(7), units::tileToGame(kScreenHeight / 2 + 1)));
    damage_texts_.addDamageable(bat_);
    map_.reset(Map::createTestMap(graphics));
+
+   particle_system_.addNewParticle(boost::shared_ptr<Particle>(
+      new ProjectileWallParticle(graphics, 320, 240)));
 
    bool running = true;
    units::MS last_update_time = SDL_GetTicks();
