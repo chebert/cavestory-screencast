@@ -1,0 +1,16 @@
+Episode 45 - Projectile Wall Particle
+=====================================
+
+Problem:
+ - The particle effect when a projectile collides with a wall.
+ - Falls into a category of a non-moving, single animation loop projectile
+   along with the projectile star particle
+
+Solution:
+ - ImmobileSingleLoopParticle
+    - This is extracted from our ProjectileStarParticle
+ - ProjectileWallParticle
+ - Constants:
+   x=11, y=0,
+   w=1, h=1
+   fps=20, num_frames=4
