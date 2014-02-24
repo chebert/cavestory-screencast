@@ -1,0 +1,11 @@
+Episode 46 - Placing the Projectile Wall Particle
+=================================================
+
+Problem:
+ - Where do we place the particle?
+ 
+Solution:
+ - if firing left : right edge (and bullet_y)
+ - if firing right: left edge (and bullet_y)
+ - if firing up   : bottom edge (and bullet_x)
+ - if firing down : top edge (and bullet_x)

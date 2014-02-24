@@ -10,7 +10,8 @@
 #include "input.h"
 #include "first_cave_bat.h"
 #include "timer.h"
-#include "projectile_wall_particle.h"
+
+#include "death_cloud_particle.h"
 
 namespace {
 const units::FPS kFps = 60;
@@ -42,9 +43,6 @@ void Game::eventLoop() {
    bat_.reset(new FirstCaveBat(graphics, units::tileToGame(7), units::tileToGame(kScreenHeight / 2 + 1)));
    damage_texts_.addDamageable(bat_);
    map_.reset(Map::createTestMap(graphics));
-
-   particle_system_.addNewParticle(boost::shared_ptr<Particle>(
-      new ProjectileWallParticle(graphics, 320, 240)));
 
    bool running = true;
    units::MS last_update_time = SDL_GetTicks();
@@ -127,8 +125,11 @@ void Game::update(units::MS elapsed_time_ms, Graphics& graphics) {
    ParticleTools particle_tools = { particle_system_, graphics };
    player_->update(elapsed_time_ms, *map_, particle_tools);
    if (bat_) {
-      if (!bat_->update(elapsed_time_ms, player_->center_x()))
+      if (!bat_->update(elapsed_time_ms, player_->center_x())) {
+         particle_system_.addNewParticle(boost::shared_ptr<Particle>(
+            new DeathCloudParticle(graphics, bat_->center_x(), bat_->center_y(), 0.12f, -45.0f)));
          bat_.reset();
+      }
    }
 
    std::vector<boost::shared_ptr<Projectile> > projectiles(player_->getProjectiles());
