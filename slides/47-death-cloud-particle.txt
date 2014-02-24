@@ -1,0 +1,14 @@
+Episode 47 - Death Cloud Particle
+=================================
+
+Problem:
+ - A single death cloud particle when a creature dies.
+
+Solution:
+ - Given an angle, center, and a speed, flies outward from the center
+ - single loop animation, expires when finished
+ - Animation:
+     "NpcSym"
+     x=1,y=0,
+     w=1,h=1,
+     fps=18, num_frames=7

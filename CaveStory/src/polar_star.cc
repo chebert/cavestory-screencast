@@ -4,6 +4,7 @@
 #include "map.h"
 #include "particle_system.h"
 #include "projectile_star_particle.h"
+#include "projectile_wall_particle.h"
 
 namespace {
 const int kPolarStarIndex = 2; // 0-based indexing
@@ -203,6 +204,30 @@ bool PolarStar::Projectile::update(units::MS elapsed_time, const Map& map, Parti
       map.getCollidingTiles(collisionRectangle()));
    for (size_t i = 0; i < colliding_tiles.size(); ++i) {
       if (colliding_tiles[i].tile_type == Map::WALL_TILE) {
+         const Rectangle tile_rectangle(
+            units::tileToGame(colliding_tiles[i].col),
+            units::tileToGame(colliding_tiles[i].row),
+            units::tileToGame(1), units::tileToGame(1));
+         units::Game particle_x, particle_y;
+         if (vertical_direction_ == HORIZONTAL) {
+            if (horizontal_direction_ == LEFT) {
+               particle_x = tile_rectangle.right();
+            } else {
+               particle_x = tile_rectangle.left();
+            }
+            particle_x -= units::kHalfTile;
+            particle_y = getY();
+         } else {
+            if (vertical_direction_ == UP) {
+               particle_y = tile_rectangle.bottom();
+            } else {
+               particle_y = tile_rectangle.top();
+            }
+            particle_y -= units::kHalfTile;
+            particle_x = getX();
+         }
+         particle_tools.system.addNewParticle(boost::shared_ptr<Particle>(
+            new ProjectileWallParticle(particle_tools.graphics, particle_x, particle_y)));
          return false;
       }
    }
