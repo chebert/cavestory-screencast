@@ -12,6 +12,7 @@
 #include "timer.h"
 
 #include "death_cloud_particle.h"
+#include "gun_experience_hud.h"
 
 namespace {
 const units::FPS kFps = 60;
@@ -43,6 +44,8 @@ void Game::eventLoop() {
    bat_.reset(new FirstCaveBat(graphics, units::tileToGame(7), units::tileToGame(kScreenHeight / 2 + 1)));
    damage_texts_.addDamageable(bat_);
    map_.reset(Map::createTestMap(graphics));
+
+   hud_.reset(new GunExperienceHUD(graphics));
 
    bool running = true;
    units::MS last_update_time = SDL_GetTicks();
@@ -160,6 +163,7 @@ void Game::draw(Graphics& graphics) {
 
    damage_texts_.draw(graphics);
    player_->drawHUD(graphics);
+   hud_->draw(graphics, 1);
 
    graphics.flip();
 }

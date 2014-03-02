@@ -7,6 +7,7 @@
 namespace units {
 
 typedef int HP;
+typedef unsigned int GunLevel;
 
 typedef float Game; // Float for extra precision. Intrisic units of position.
 typedef int Pixel; // Integer for discrete units. Pixel values can be +/-.
