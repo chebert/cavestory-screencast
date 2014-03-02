@@ -1,0 +1,40 @@
+Episode 50 - Gun Experience HUD: Flash, Fill, and Max
+=====================================================
+
+Problem:
+ - Our polar star has 3 levels of experience which we need to represent visually
+ - drawn immediately above our health HUD
+
+  Lv 1             Lv 2             Lv 3
+----------|---------------------|----------|
+         10pts                 30pts      40pts
+
+So assuming Level 2:
+
+20 xp (total) draws halfway
+     ==================
+Lv 2 --------|
+     ==================
+
+40 xp is the most the polar star can collect. indicated by
+     ==================
+Lv 3        MAX
+     ==================
+
+Whenever we collect experience, the experience bar flashes for ~800ms
+
+Solution: Part 2 - Flash, Fill, Max
+ - Before we take care of fill, let's make our VaryingWidthSprite smarter.
+    - Instead of set_width(units::Pixel) let's do 
+                 set_fractional_width(percentage)
+    - VaryingWidthSprite constructor will also need a max_width (not just initial width)
+
+
+ - All Sprites:
+    w=kExperienceBarWidth, h=kExperienceBarHeight
+ - Flash Sprite:
+    x=5/2 TU, y=5 TU
+ - Fill Sprite:
+    x=0, y=5 TU
+ - Max Sprite:
+    x=5/2 TU, y=9/2 TU

@@ -98,8 +98,6 @@ struct Player : public Damageable {
       // returns true if we have died.
       bool takeDamage(units::HP damage);
      private:
-      units::Game fillOffset(units::HP health) const;
-
       units::HP damage_;
       Timer damage_timer_;
 

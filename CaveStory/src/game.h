@@ -12,7 +12,6 @@ struct Map;
 struct Player;
 struct FirstCaveBat;
 struct Graphics;
-struct GunExperienceHUD;
 
 struct Game {
    Game();
@@ -29,7 +28,6 @@ struct Game {
    boost::shared_ptr<FirstCaveBat> bat_;
    boost::scoped_ptr<Map> map_;
 
-   boost::scoped_ptr<GunExperienceHUD> hud_;
    ParticleSystem front_particle_system_, entity_particle_system_;
    DamageTexts damage_texts_;
 };
