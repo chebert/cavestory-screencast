@@ -21,7 +21,8 @@ struct ParticleSystem {
 };
 
 struct ParticleTools {
-   ParticleSystem& system;
+   ParticleSystem& front_system;
+   ParticleSystem& entity_system;
    Graphics& graphics;
 };
 

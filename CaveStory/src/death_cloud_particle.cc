@@ -1,5 +1,7 @@
 #include "death_cloud_particle.h"
 
+#include "particle_system.h"
+
 const std::string kSpriteName("NpcSym");
 const units::Tile kSourceX = 1;
 const units::Tile kSourceY = 0;
@@ -7,6 +9,22 @@ const units::Tile kSourceWidth = 1;
 const units::Tile kSourceHeight = 1;
 const units::FPS kFps = 18;
 const units::Frame kNumFrames = 7;
+
+const units::Velocity kBaseVelocity = 0.12f;
+
+//static
+void DeathCloudParticle::createRandomDeathClouds(
+   ParticleTools& particle_tools,
+   units::Game center_x, units::Game center_y,
+   int num_particles)
+{
+   for (int i = 0; i < num_particles; ++i) {
+      particle_tools.entity_system.addNewParticle(boost::shared_ptr<DeathCloudParticle>(
+         new DeathCloudParticle(particle_tools.graphics,
+            center_x, center_y, 
+            rand() % 3 * kBaseVelocity, static_cast<units::Degrees>(rand() % 360))));
+   }
+}
 
 DeathCloudParticle::DeathCloudParticle(
    Graphics& graphics,

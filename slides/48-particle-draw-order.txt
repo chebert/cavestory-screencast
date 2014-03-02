@@ -1,0 +1,21 @@
+Episode 48 - Random Death Clouds and Particle Draw Order
+========================================================
+
+Problem:
+ - Random death clouds
+
+Solution:
+ - static createRandomDeathCloud(ParticleTools&, int num_particles, x, y);
+
+Problem:
+ - clouds should be drawn behind the walls/player, while
+   other particles like gunshots should be drawn in front of the walls
+
+ - draw order:
+    - Some particles drawn in front of walls
+    - Some particles drawn behind player
+
+Simpler Solution:
+ - Add another particle system
+   - one is front_particle_system
+   - one is entity_particle_system

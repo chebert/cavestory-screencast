@@ -5,6 +5,8 @@
 #include "particle.h"
 #include "polar_vector.h"
 
+struct ParticleTools;
+
 struct DeathCloudParticle : public Particle {
    DeathCloudParticle(Graphics& graphics,
       units::Game center_x, units::Game center_y,
@@ -12,6 +14,11 @@ struct DeathCloudParticle : public Particle {
 
    bool update(units::MS elapsed_time);
    void draw(Graphics& graphics);
+
+   static void createRandomDeathClouds(
+      ParticleTools& particle_tools,
+      units::Game center_x, units::Game center_y,
+      int num_particles);
 
   private:
    const units::Game center_x_, center_y_;

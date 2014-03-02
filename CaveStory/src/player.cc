@@ -414,7 +414,7 @@ void Player::updateY(units::MS elapsed_time_ms, const Map& map, ParticleTools& p
       info = getWallCollisionInfo(map, topCollision(0));
       if (info.collided) {
          y_ = units::tileToGame(info.row) + kCollisionYHeight;
-         particle_tools.system.addNewParticle(boost::shared_ptr<Particle>(
+         particle_tools.front_system.addNewParticle(boost::shared_ptr<Particle>(
             new HeadBumpParticle(particle_tools.graphics, center_x(), y_ + kCollisionYTop)));
       }
    } else {
@@ -422,7 +422,7 @@ void Player::updateY(units::MS elapsed_time_ms, const Map& map, ParticleTools& p
       // React to collision
       if (info.collided) {
          y_ = units::tileToGame(info.row) + kCollisionYHeight;
-         particle_tools.system.addNewParticle(boost::shared_ptr<Particle>(
+         particle_tools.front_system.addNewParticle(boost::shared_ptr<Particle>(
             new HeadBumpParticle(particle_tools.graphics, center_x(), y_ + kCollisionYTop)));
          velocity_y_ = 0.0f;
       }
