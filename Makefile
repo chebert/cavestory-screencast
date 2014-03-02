@@ -46,7 +46,7 @@ all: $(EXECUTABLE)
 # Pastes in all of the Make rules inside of the generated .d files.
 # Rules are of the format (file.o: file.cc header1.h header2.h)
 # Each .d file gets generated whenever its .o file is compiled.
-# Special thanks to /u/yurik for pointing this out to me!
+# Special thanks to /u/yuriks for pointing this out to me!
 -include $(OBJECTS:.o=.d)
 
 # Links the objects into a "cavestory" executable.
