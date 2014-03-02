@@ -1,0 +1,43 @@
+Episode 49 - Gun Experience HUD
+===============================
+
+Problem:
+ - Our polar star has 3 levels of experience which we need to represent visually
+ - drawn immediately above our health HUD
+
+  Lv 1             Lv 2             Lv 3
+----------|---------------------|----------|
+         10pts                 30pts      40pts
+
+So assuming Level 2:
+
+20 xp (total) draws halfway
+     ==================
+Lv 2 --------|
+     ==================
+
+40 xp is the most the polar star can collect. indicated by
+     ==================
+Lv 3        MAX
+     ==================
+
+Whenever we collect experience, the experience bar flashes for ~800ms
+
+Solution: Part 1 - Lay out the Foundations
+ - GunExperienceHUD class
+ - Draw Position y=3/2 T.U.
+ - Draw the Lv:
+    Source:
+      x=5 T.U., y=160 G.U. (1-2 pixels shy of 5 TU, go figure)
+      w=1 T.U., h=1/2 T.U.
+    Position:
+      x=1 T.U.
+ - Draw the Level Number:
+    Position:
+      x=3/2 T.U.
+ - Draw the Experience Bar:
+    Source:
+      x=0, y=9/2 T.U.
+      w=5/2 T.U., h=1/2 T.U.
+    Position:
+      x=5/2 T.U.
