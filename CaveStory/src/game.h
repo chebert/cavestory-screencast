@@ -27,7 +27,7 @@ struct Game {
    boost::shared_ptr<Player> player_;
    boost::shared_ptr<FirstCaveBat> bat_;
    boost::scoped_ptr<Map> map_;
-   ParticleSystem particle_system_;
+   ParticleSystem front_particle_system_, entity_particle_system_;
    DamageTexts damage_texts_;
 };
 
