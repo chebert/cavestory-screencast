@@ -1,6 +1,8 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
+#include "kinematics.h"
+#include "map_collidable.h"
 #include "sprite.h"
 #include "sprite_state.h"
 #include "varying_width_sprite.h"
@@ -18,10 +20,11 @@ struct Projectile;
 struct Map;
 struct ParticleTools;
 
-struct Player : public Damageable {
-   Player(Graphics& graphics, units::Game x, units::Game y);
+struct Player : public Damageable,
+                private MapCollidable {
+   Player(Graphics& graphics, ParticleTools& particle_tools, units::Game x, units::Game y);
 
-   void update(units::MS elapsed_time_ms, const Map& map, ParticleTools& particle_tools);
+   void update(units::MS elapsed_time_ms, const Map& map);
    void draw(Graphics& graphics);
    void drawHUD(Graphics& graphics);
 
@@ -33,7 +36,7 @@ struct Player : public Damageable {
    void lookDown();
    void lookHorizontal();
 
-   void startFire(ParticleTools& particle_tools);
+   void startFire();
    void stopFire();
 
    void startJump();
@@ -42,8 +45,8 @@ struct Player : public Damageable {
    void takeDamage(units::HP damage);
 
    Rectangle damageRectangle() const; 
-   units::Game center_x() const { return x_ + units::kHalfTile; }
-   units::Game center_y() const { return y_ + units::kHalfTile; }
+   units::Game center_x() const { return kinematics_x_.position + units::kHalfTile; }
+   units::Game center_y() const { return kinematics_y_.position + units::kHalfTile; }
    boost::shared_ptr<DamageText> get_damage_text() { return damage_text_; }
 
    std::vector<boost::shared_ptr<Projectile> > getProjectiles()
@@ -113,14 +116,11 @@ struct Player : public Damageable {
    void initializeSprite(Graphics& graphics, const SpriteState& sprite_state);
    SpriteState getSpriteState();
 
-   Rectangle leftCollision(units::Game delta) const;
-   Rectangle rightCollision(units::Game delta) const;
-
-   Rectangle topCollision(units::Game delta) const;
-   Rectangle bottomCollision(units::Game delta) const;
-
    void updateX(units::MS elapsed_time_ms, const Map& map);
-   void updateY(units::MS elapsed_time_ms, const Map& map, ParticleTools& particle_tools);
+   void updateY(units::MS elapsed_time_ms, const Map& map);
+
+   void onCollision(MapCollidable::SideType side, bool is_delta_direction);
+   void onDelta(MapCollidable::SideType side);
 
    bool spriteIsVisible() const;
 
@@ -133,8 +133,8 @@ struct Player : public Damageable {
                HORIZONTAL : intended_vertical_facing_;
    }
 
-   units::Game x_, y_;
-   units::Velocity velocity_x_, velocity_y_;
+   ParticleTools& particle_tools_;
+   Kinematics kinematics_x_, kinematics_y_;
    int acceleration_x_;
    HorizontalFacing horizontal_facing_;
    VerticalFacing intended_vertical_facing_;

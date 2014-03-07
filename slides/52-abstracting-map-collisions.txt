@@ -1,0 +1,53 @@
+Episode 52 - Abstracting Map Collisions
+=======================================
+
+Problem:
+ - The player is not the only thing that follows our map collision algorithm:
+   - Experience Pickups
+   - Many types of enemies
+   - Fireball projectiles
+   - More?
+
+Our Algorithm:
+ - The algorithm, though, is generally the same:
+   First Y, then X:
+
+      Update Velocity
+      Calculate Delta
+      Check collisions in direction of delta
+      if collided:
+         set y/x
+         Do extra reactions
+      else:
+         Apply Delta
+         Do extra stuff onDelta
+
+      Check collisions in other direction
+      if collided:
+         set y/x
+         Do extra reactions
+
+Solution:
+ - Kinematics
+  - Why kinematics?
+    - with kinematics, we can specialize (e.g. GravityKinematics)
+    - calculate delta easily
+  - position, velocity
+  - delta(elapsed_time)
+
+ - CollisionRectangle
+  - left/right/top/bottomCollision(x, y, delta);
+  - boundingBox();
+
+ - Abstract MapCollidable
+  - updateX/Y(Kinematics& kinematics_x, kinematics_y, elapsed_time, const Map& map)
+  - onCollision(SideType, is_delta_direction) = 0;
+  - onDelta(SideType) = 0;
+
+Implementation Plan:
+1 - Create Kinematics
+2 - Player uses kinematics_x_, kinematics_y_
+3 - Create CollisionRectangle
+4 - Player uses CollisionRectangle
+5 - implement onCollision/onDelta in Player class
+6 - move collision code into MapCollidable object, have player implement
