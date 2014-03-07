@@ -1,0 +1,22 @@
+Episode 51 - Gun Levels
+=======================
+
+Problem:
+ - Our Polar Star projectiles differ depending on the level.
+ - the following change as the  level increases:
+  - Projectile Sprites
+  - Projectiles get wider (kProjectileWidth)
+  - Damage increases
+  - How far a projectile can travel changes (kProjectileMaxOffset)
+
+Solution:
+ - kMaxGunLevels=3
+ - Use arrays for constants/variables that change based on level
+  - e.g. kProjectileWidth ==> kProjectileWidths[kMaxGunLevels]
+         // Sprites
+         horizontal_projectile_ ==> horizontal_projectiles_[kMaxGunLevels]
+
+Bonus:
+ - Let's draw our gun experience HUD
+  - Player class stores it
+  - PolarStar has drawHUD method

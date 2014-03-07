@@ -1,6 +1,7 @@
 #include "polar_star.h"
 
 #include "sprite.h"
+#include "gun_experience_hud.h"
 #include "map.h"
 #include "particle_system.h"
 #include "projectile_star_particle.h"
@@ -34,17 +35,21 @@ const units::Game kNozzleDownLeftX = 29;
 const units::Game kNozzleDownRightX = 19;
 
 // Projectile Sprite
-const units::Tile kProjectileSourceY = 2;
-const units::Tile kHorizontalProjectileSourceX = 8;
-const units::Tile kVerticalProjectileSourceX = 9;
+const units::Tile kProjectileSourceYs[units::kMaxGunLevel] = { 2, 2, 3 };
+const units::Tile kHorizontalProjectileSourceXs[units::kMaxGunLevel] = { 8, 10, 8 };
 // Projectile Velocity
 const units::Velocity kProjectileSpeed = 0.6f;
 
-const units::Game kProjectileMaxOffset = 7 * units::kHalfTile;
-const units::Game kProjectileWidth = 4.0f;
+const units::Game kProjectileMaxOffsets[units::kMaxGunLevel] =
+   { 7 * units::kHalfTile, units::tileToGame(5), units::tileToGame(7) };
+const units::Game kProjectileWidths[units::kMaxGunLevel] = { 4.0f, 8.0f, 16.0f };
+
+const units::HP kDamages[units::kMaxGunLevel] = { 1, 2, 4 };
 }
 
-PolarStar::PolarStar(Graphics& graphics) {
+PolarStar::PolarStar(Graphics& graphics) :
+   current_level_(3)
+{
    initializeSprites(graphics);
 }
 
@@ -59,6 +64,10 @@ void PolarStar::updateProjectiles(units::MS elapsed_time, const Map& map, Partic
          projectile_b_.reset();
       }
    }
+}
+
+void PolarStar::drawHUD(Graphics& graphics, GunExperienceHUD& hud) {
+   hud.draw(graphics, current_level_, 2, 10);
 }
 
 void PolarStar::draw(
@@ -125,15 +134,21 @@ void PolarStar::startFire(units::Game player_x, units::Game player_y,
    // Create our projectile using bullet_x, bullet_y
    if (!projectile_a_) {
       projectile_a_.reset(new Projectile(
-         vertical_facing == HORIZONTAL ? horizontal_projectile_ : vertical_projectile_,
+         vertical_facing == HORIZONTAL ?
+            horizontal_projectiles_[current_level_ - 1] :
+            vertical_projectiles_[current_level_ - 1],
          horizontal_facing, vertical_facing,
          bullet_x, bullet_y,
+         current_level_,
          particle_tools));
    } else if (!projectile_b_) {
       projectile_b_.reset(new Projectile(
-         vertical_facing == HORIZONTAL ? horizontal_projectile_ : vertical_projectile_,
+         vertical_facing == HORIZONTAL ?
+            horizontal_projectiles_[current_level_ - 1] :
+            vertical_projectiles_[current_level_ - 1],
          horizontal_facing, vertical_facing,
          bullet_x, bullet_y,
+         current_level_,
          particle_tools));
    }
 }
@@ -146,14 +161,18 @@ std::vector<boost::shared_ptr<Projectile> > PolarStar::getProjectiles() {
 }
 
 void PolarStar::initializeSprites(Graphics& graphics) {
-   horizontal_projectile_.reset(new Sprite(
-      graphics, "Bullet",
-      units::tileToPixel(kHorizontalProjectileSourceX), units::tileToPixel(kProjectileSourceY),
-      units::tileToPixel(1), units::tileToPixel(1)));
-   vertical_projectile_.reset(new Sprite(
-      graphics, "Bullet",
-      units::tileToPixel(kVerticalProjectileSourceX), units::tileToPixel(kProjectileSourceY),
-      units::tileToPixel(1), units::tileToPixel(1)));
+   for (units::GunLevel gun_level = 0; gun_level < units::kMaxGunLevel; ++gun_level) {
+      horizontal_projectiles_[gun_level].reset(new Sprite(
+         graphics, "Bullet",
+         units::tileToPixel(kHorizontalProjectileSourceXs[gun_level]),
+         units::tileToPixel(kProjectileSourceYs[gun_level]),
+         units::tileToPixel(1), units::tileToPixel(1)));
+      vertical_projectiles_[gun_level].reset(new Sprite(
+         graphics, "Bullet",
+         units::tileToPixel(kHorizontalProjectileSourceXs[gun_level] + 1),
+         units::tileToPixel(kProjectileSourceYs[gun_level]),
+         units::tileToPixel(1), units::tileToPixel(1)));
+   }
    ENUM_FOREACH(h_facing, HORIZONTAL_FACING) {
       ENUM_FOREACH(v_facing, VERTICAL_FACING) {
          initializeSprite(graphics, boost::make_tuple((HorizontalFacing)h_facing,
@@ -185,11 +204,13 @@ PolarStar::Projectile::Projectile(boost::shared_ptr<Sprite> sprite,
                                   HorizontalFacing horizontal_direction,
                                   VerticalFacing vertical_direction,
                                   units::Game x, units::Game y,
+                                  units::GunLevel gun_level,
                                   ParticleTools& particle_tools) :
    sprite_(sprite),
    horizontal_direction_(horizontal_direction),
    vertical_direction_(vertical_direction),
    x_(x), y_(y),
+   gun_level_(gun_level),
    offset_(0),
    alive_(true)
 {
@@ -234,7 +255,7 @@ bool PolarStar::Projectile::update(units::MS elapsed_time, const Map& map, Parti
 
    if (!alive_) {
       return false;
-   } else if (offset_ >= kProjectileMaxOffset) {
+   } else if (offset_ >= kProjectileMaxOffsets[gun_level_ - 1]) {
       particle_tools.front_system.addNewParticle(boost::shared_ptr<Particle>(
          new ProjectileStarParticle(particle_tools.graphics, getX(), getY())));
       return false;
@@ -245,12 +266,16 @@ bool PolarStar::Projectile::update(units::MS elapsed_time, const Map& map, Parti
 
 Rectangle PolarStar::Projectile::collisionRectangle() const {
    const units::Game width = vertical_direction_ == HORIZONTAL ?
-      units::tileToGame(1) : kProjectileWidth;
+      units::tileToGame(1) : kProjectileWidths[gun_level_ - 1];
    const units::Game height = vertical_direction_ != HORIZONTAL ?
-      units::tileToGame(1) : kProjectileWidth;
+      units::tileToGame(1) : kProjectileWidths[gun_level_ - 1];
    return Rectangle(getX() + units::kHalfTile - width  / 2,
                     getY() + units::kHalfTile - height / 2,
                     width, height);
+}
+
+units::HP PolarStar::Projectile::contactDamage() const {
+   return kDamages[gun_level_ - 1];
 }
 
 units::Game PolarStar::Projectile::getX() const {
