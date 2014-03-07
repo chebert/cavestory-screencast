@@ -337,10 +337,10 @@ void Player::onCollision(MapCollidable::SideType side, bool is_delta_direction) 
 void Player::onDelta(MapCollidable::SideType side) {
    switch (side) {
       case MapCollidable::TOP_SIDE:
-         on_ground_ = true;
+         on_ground_ = false;
          break;
       case MapCollidable::BOTTOM_SIDE:
-         on_ground_ = true;
+         on_ground_ = false;
          break;
       case MapCollidable::LEFT_SIDE:
          break;
