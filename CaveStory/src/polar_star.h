@@ -10,6 +10,7 @@
 #include "projectile.h"
 
 struct Graphics;
+struct GunExperienceHUD;
 struct Map;
 struct ParticleTools;
 struct Sprite;
@@ -18,6 +19,7 @@ struct PolarStar {
    PolarStar(Graphics& graphics);
 
    void updateProjectiles(units::MS elapsed_time, const Map& map, ParticleTools& particle_tools);
+   void drawHUD(Graphics& graphics, GunExperienceHUD& hud);
    void draw(
       Graphics& graphics,
       HorizontalFacing horizontal_facing, VerticalFacing vertical_facing,
@@ -44,13 +46,14 @@ struct PolarStar {
                  HorizontalFacing horizontal_direction,
                  VerticalFacing vertical_direction,
                  units::Game x, units::Game y, 
+                 units::GunLevel gun_level,
                  ParticleTools& particle_tools);
 
       // Returns true if |this| are alive.
       bool update(units::MS elapsed_time, const Map& map, ParticleTools& particle_tools);
       void draw(Graphics& graphics);
       Rectangle collisionRectangle() const;
-      units::HP contactDamage() const { return 1; }
+      units::HP contactDamage() const;
       void collideWithEnemy() { alive_ = false; }
 
      private:
@@ -61,6 +64,7 @@ struct PolarStar {
       const HorizontalFacing horizontal_direction_;
       const VerticalFacing vertical_direction_;
       const units::Game x_, y_;
+      const units::GunLevel gun_level_;
       units::Game offset_;
       bool alive_;
    };
@@ -72,9 +76,10 @@ struct PolarStar {
    void initializeSprites(Graphics& graphics);
    void initializeSprite(Graphics& graphics, const SpriteState& sprite_state);
 
+   units::GunLevel current_level_;
    std::map<SpriteState, boost::shared_ptr<Sprite> > sprite_map_;
-   boost::shared_ptr<Sprite> horizontal_projectile_;
-   boost::shared_ptr<Sprite> vertical_projectile_;
+   boost::shared_ptr<Sprite> horizontal_projectiles_[units::kMaxGunLevel];
+   boost::shared_ptr<Sprite> vertical_projectiles_[units::kMaxGunLevel];
 
    boost::shared_ptr<Projectile> projectile_a_;
    boost::shared_ptr<Projectile> projectile_b_;

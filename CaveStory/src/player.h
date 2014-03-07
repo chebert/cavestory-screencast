@@ -11,6 +11,7 @@
 #include "damage_text.h"
 #include "damageable.h"
 #include "polar_star.h"
+#include "gun_experience_hud.h"
 
 struct Graphics;
 struct Projectile;
@@ -147,6 +148,7 @@ struct Player : public Damageable {
 
    WalkingAnimation walking_animation_;
 
+   GunExperienceHUD gun_experience_hud_;
    PolarStar polar_star_;
 
    std::map<SpriteState, boost::shared_ptr<Sprite> > sprites_;
