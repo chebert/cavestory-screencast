@@ -1,5 +1,6 @@
 #include "player.h"
 
+#include "accelerators.h"
 #include "collision_rectangle.h"
 #include "sprite.h"
 #include "game.h"
@@ -17,17 +18,18 @@ namespace {
 // Walk Motion
 const units::Acceleration kWalkingAcceleration = 0.00083007812f;
 const units::Velocity kMaxSpeedX = 0.15859375f;
-const units::Acceleration kFriction = 0.00049804687f;
+const BidirectionalAccelerators kWalkingAccelerators(kWalkingAcceleration, kMaxSpeedX);
 
-// Fall Motion
-const units::Acceleration kGravity = 0.00078125f;
-const units::Velocity kMaxSpeedY = 0.2998046875f;
+const units::Acceleration kFriction = 0.00049804687f;
+const FrictionAccelerator kFrictionAccelerator(kFriction);
 
 // Jump Motion
 const units::Velocity kJumpSpeed = 0.25f;
 const units::Velocity kShortJumpSpeed = kJumpSpeed / 1.5f;
 const units::Acceleration kAirAcceleration = 0.0003125f;
 const units::Acceleration kJumpGravity = 0.0003125f;
+const BidirectionalAccelerators kAirAccelerators(kAirAcceleration, kMaxSpeedX);
+const ConstantAccelerator kJumpGravityAccelerator(kJumpGravity, kTerminalSpeed);
 
 // Sprites
 const std::string kSpriteFilePath("MyChar");
@@ -281,33 +283,34 @@ Player::SpriteState Player::getSpriteState() {
 
 void Player::updateX(units::MS elapsed_time_ms, const Map& map) {
    // Update Velocity
-   units::Acceleration acceleration_x = 0.0f;
-   if (acceleration_x_ < 0) acceleration_x = on_ground() ? -kWalkingAcceleration : -kAirAcceleration;
-   else if (acceleration_x_ > 0) acceleration_x = on_ground() ? kWalkingAcceleration : kAirAcceleration;
-
-   kinematics_x_.velocity += acceleration_x * elapsed_time_ms;
-
-   if (acceleration_x_ < 0) {
-      kinematics_x_.velocity = std::max(kinematics_x_.velocity, -kMaxSpeedX);
+   const Accelerator* accelerator;
+   if (on_ground()) {
+      if (acceleration_x_ == 0) {
+         accelerator = &kFrictionAccelerator;
+      } else if (acceleration_x_ < 0) {
+         accelerator = &kWalkingAccelerators.negative;
+      } else {
+         accelerator = &kWalkingAccelerators.positive;
+      }
+   } else {
+      if (acceleration_x_ == 0) {
+         accelerator = &ZeroAccelerator::kZero;
+      } else if (acceleration_x_ < 0) {
+         accelerator = &kAirAccelerators.negative;
+      } else {
+         accelerator = &kAirAccelerators.positive;
+      }
    }
-   else if (acceleration_x_ > 0) {
-      kinematics_x_.velocity = std::min(kinematics_x_.velocity, kMaxSpeedX);
-   }
-   else if (on_ground()) {
-      kinematics_x_.velocity = kinematics_x_.velocity > 0.0f ?
-         std::max(0.0f, kinematics_x_.velocity - kFriction * elapsed_time_ms) :
-         std::min(0.0f, kinematics_x_.velocity + kFriction * elapsed_time_ms);
-   }
 
-   MapCollidable::updateX(kCollisionRectangle, kinematics_x_, kinematics_y_, elapsed_time_ms, map);
+   MapCollidable::updateX(kCollisionRectangle, *accelerator, kinematics_x_, kinematics_y_, elapsed_time_ms, map);
 }
 
 void Player::updateY(units::MS elapsed_time_ms, const Map& map) {
    // Update Velocity
-   const units::Acceleration gravity = jump_active_ && kinematics_y_.velocity < 0.0f ? kJumpGravity : kGravity;
-   kinematics_y_.velocity = std::min(kinematics_y_.velocity + gravity * elapsed_time_ms, kMaxSpeedY);
+   const Accelerator& accelerator = jump_active_ && kinematics_y_.velocity < 0.0f ?
+      kJumpGravityAccelerator : ConstantAccelerator::kGravity;
 
-   MapCollidable::updateY(kCollisionRectangle, kinematics_x_, kinematics_y_, elapsed_time_ms, map);
+   MapCollidable::updateY(kCollisionRectangle, accelerator, kinematics_x_, kinematics_y_, elapsed_time_ms, map);
 }
 
 void Player::onCollision(MapCollidable::SideType side, bool is_delta_direction) {

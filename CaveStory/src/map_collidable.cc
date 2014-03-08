@@ -1,5 +1,6 @@
 #include "map_collidable.h"
 
+#include "accelerators.h"
 #include "kinematics.h"
 #include "collision_rectangle.h"
 #include "map.h"
@@ -26,8 +27,10 @@ CollisionInfo getWallCollisionInfo(const Map& map, const Rectangle& rectangle) {
 
 void MapCollidable::updateX(
       const CollisionRectangle& collision_rectangle,
+      const Accelerator& accelerator,
       Kinematics& kinematics_x, const Kinematics& kinematics_y, 
       units::MS elapsed_time_ms, const Map& map) {
+   accelerator.updateVelocity(kinematics_x, elapsed_time_ms);
    // Calculate delta
    const units::Game delta = kinematics_x.velocity * elapsed_time_ms; 
    if (delta > 0.0f) {
@@ -71,8 +74,10 @@ void MapCollidable::updateX(
 
 void MapCollidable::updateY(
       const CollisionRectangle& collision_rectangle,
+      const Accelerator& accelerator,
       const Kinematics& kinematics_x, Kinematics& kinematics_y, 
       units::MS elapsed_time_ms, const Map& map) {
+   accelerator.updateVelocity(kinematics_y, elapsed_time_ms);
    // Calculate delta
    const units::Game delta = kinematics_y.velocity * elapsed_time_ms;
    if (delta > 0) {

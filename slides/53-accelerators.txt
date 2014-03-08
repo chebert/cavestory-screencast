@@ -1,0 +1,14 @@
+Episode 53 - Accelerators
+=========================
+
+Problem:
+ - Abstract out methods of acceleration:
+   - Gravity
+   - Friction
+   - Constant Positive/Negative
+   - Zero
+
+Solution:
+ - Accelerator struct
+   - updateVelocity(Kinematics& kinematics, units::MS elapsed_time);
+ - MapCollidable would then be able to update velocity as well
