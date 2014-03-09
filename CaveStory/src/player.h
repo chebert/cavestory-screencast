@@ -19,6 +19,7 @@ struct Graphics;
 struct Projectile;
 struct Map;
 struct ParticleTools;
+struct Pickup;
 
 struct Player : public Damageable,
                 private MapCollidable {
@@ -43,6 +44,7 @@ struct Player : public Damageable,
    void stopJump();
 
    void takeDamage(units::HP damage);
+   void collectPickup(const Pickup& pickup);
 
    Rectangle damageRectangle() const; 
    units::Game center_x() const { return kinematics_x_.position + units::kHalfTile; }

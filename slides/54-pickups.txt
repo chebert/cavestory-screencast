@@ -1,0 +1,24 @@
+54 - Pickups
+============
+
+Problem:
+ - Need a system to keep track of pickups (hearts/missiles/doritos)
+ - What describes a pickup?
+
+Solution:
+ - Pickup:
+  - draw(graphics)
+  - collisionRectangle() - determine if the player is colliding
+  - bool update(elapsed_time, map) - update position/sprite. true=alive, false=dead
+  - value() - how many missiles/HP/EXP is it worth?
+  - type() - is it health? Missile? Experience?
+
+ - Player:
+  - collectPickup(Pickup& pickup)
+
+ - Pickups:
+  - set<shared_ptr<Pickup> >
+  - draw(graphics) - drawn after enemies before player
+  - update(elapsed_time, map) - removes dead pickups
+  - handleCollisions(player) - checks collisions: calls player.collectPickup and kills pickup
+  - add(shared_ptr<Pickup>)
