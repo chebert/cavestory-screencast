@@ -1,7 +1,7 @@
 #include "player.h"
 
 #include "accelerators.h"
-#include "collision_rectangle.h"
+#include "composite_collision_rectangle.h"
 #include "sprite.h"
 #include "game.h"
 #include "animated_sprite.h"
@@ -52,7 +52,7 @@ const units::Game kCollisionTopWidth = 18;
 const units::Game kCollisionBottomWidth = 10;
 const units::Game kCollisionTopLeft = (units::tileToGame(1) - kCollisionTopWidth) / 2;
 const units::Game kCollisionBottomLeft = (units::tileToGame(1) - kCollisionBottomWidth) / 2;
-const CollisionRectangle kCollisionRectangle(
+const CompositeCollisionRectangle kCollisionRectangle(
    Rectangle(kCollisionTopLeft, kCollisionYTop, kCollisionTopWidth, kCollisionYHeight / 2),
    Rectangle(kCollisionBottomLeft, kCollisionYTop + kCollisionYHeight / 2,
              kCollisionBottomWidth, kCollisionYHeight / 2),

@@ -1,0 +1,15 @@
+55 - Simple Collision Rectangle
+===============================
+   
+Problem:
+ - Create a CollisionRectangle from 1 rectangle instead of 4
+
+Solution:
+ - CollisionRectangle is interface, split into:
+   - CompositeCollisionRectangle - made of 4 rectangles (top/left/bottom/right)
+   - SimpleCollisionRectangle - made of 1 rectangle
+ - Since SimpleCollisionRectangle is made of 1 rectangle...
+
+ - we need to make sure to make Simple's bounding box a little bit bigger than
+   its rectangle.
+   - otherwise, when we updateX, we will still be colliding
