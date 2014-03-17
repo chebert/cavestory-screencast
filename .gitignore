@@ -4,7 +4,8 @@ Debug/
 gen/
 CaveStory/Debug
 gen/
-content/
+content
+tags
 CaveStory.sln
 obj/
 .depend

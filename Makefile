@@ -1,5 +1,6 @@
+SRCDIR=CaveStory/src
 # The C++ source files (but not the headers)
-SRCS=$(wildcard CaveStory/src/*.cc)
+SRCS=$(wildcard $(SRCDIR)/*.cc)
 
 # The directory to store the compiled .o files.
 OBJDIR=obj
@@ -76,3 +77,6 @@ clean:
 # the content to load properly)
 run:
 	cd $(BINDIR) && ./$(EXECUTABLE)
+
+ctags:
+	ctags -R $(SRCDIR)/
