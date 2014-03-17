@@ -7,6 +7,7 @@
 #include "animated_sprite.h"
 #include "graphics.h"
 #include "map.h"
+#include "pickup.h"
 #include "rectangle.h"
 #include "number_sprite.h"
 #include "particle_system.h"
@@ -173,7 +174,11 @@ void Player::takeDamage(units::HP damage) {
    invincible_timer_.reset();
 }
 
-void Player::collectPickup(const Pickup&) {
+void Player::collectPickup(const Pickup& pickup) {
+   if (pickup.type() == Pickup::EXPERIENCE) {
+      polar_star_.collectExperience(static_cast<units::GunExperience>(pickup.value()));
+      gun_experience_hud_.activateFlash();
+   }
 }
 
 Rectangle Player::damageRectangle() const {

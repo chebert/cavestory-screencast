@@ -46,9 +46,6 @@ void Game::eventLoop() {
    damage_texts_.addDamageable(bat_);
    map_.reset(Map::createTestMap(graphics));
 
-   pickups_.add(boost::shared_ptr<Pickup>(
-      new PowerDoritoPickup(graphics, 300, 200, PowerDoritoPickup::SMALL)));
-
    bool running = true;
    units::MS last_update_time = SDL_GetTicks();
    while (running) {
@@ -132,6 +129,9 @@ void Game::update(units::MS elapsed_time_ms, Graphics& graphics) {
    if (bat_) {
       if (!bat_->update(elapsed_time_ms, player_->center_x())) {
          ParticleTools particle_tools = { front_particle_system_, entity_particle_system_, graphics };
+         pickups_.add(boost::shared_ptr<Pickup>(
+            new PowerDoritoPickup(graphics,
+               bat_->center_x(), bat_->center_y(), PowerDoritoPickup::SMALL)));
          DeathCloudParticle::createRandomDeathClouds(particle_tools,
             bat_->center_x(), bat_->center_y(),
             3);

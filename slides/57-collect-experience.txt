@@ -1,0 +1,21 @@
+Episode 57 - Collecting Experience
+==================================
+
+Problem:
+ - Collecting experience needs to increase experience
+ - More xp --> Higher Gun Levels
+
+Solution:
+PolarStar:
+ - current_experience_
+ - current_level_ => function of current_experience
+    30+ exp => Lvl 3
+    10+ exp => Lvl 2
+     0+ exp => Lvl 1
+
+Player:
+ - call PolarStar.collectExperience()
+ - also activate our gun_hud flash
+
+Game:
+ - bat drop experience
