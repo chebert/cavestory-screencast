@@ -26,6 +26,7 @@ struct PolarStar {
       bool gun_up,
       units::Game x, units::Game y);
 
+   void collectExperience(units::GunExperience experience);
    void startFire(units::Game player_x, units::Game player_y,
                   HorizontalFacing horizontal_facing, VerticalFacing vertical_facing,
                   bool gun_up, ParticleTools& particle_tools);
@@ -76,7 +77,9 @@ struct PolarStar {
    void initializeSprites(Graphics& graphics);
    void initializeSprite(Graphics& graphics, const SpriteState& sprite_state);
 
-   units::GunLevel current_level_;
+   units::GunLevel current_level() const;
+
+   units::GunExperience current_experience_;
    std::map<SpriteState, boost::shared_ptr<Sprite> > sprite_map_;
    boost::shared_ptr<Sprite> horizontal_projectiles_[units::kMaxGunLevel];
    boost::shared_ptr<Sprite> vertical_projectiles_[units::kMaxGunLevel];
