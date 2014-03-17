@@ -7,6 +7,7 @@
 #include "units.h"
 #include "damage_texts.h"
 #include "particle_system.h"
+#include "pickups.h"
 
 struct Map;
 struct Player;
@@ -30,6 +31,7 @@ struct Game {
 
    ParticleSystem front_particle_system_, entity_particle_system_;
    DamageTexts damage_texts_;
+   Pickups pickups_;
 };
 
 #endif // GAME_H_

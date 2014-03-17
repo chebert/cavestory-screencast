@@ -1,0 +1,29 @@
+56 - Power Doritos!
+== = ===== ========
+
+Problem:
+ - Power Doritos
+ - 3 levels of power doritos: { small, medium, large }
+
+Solution:
+1 Sprites
+ - NpcSym
+   y={1, 2, 3} T.U.
+
+2 Timer
+ - lasts for 8 seconds
+ - starts flashing at about 7 seconds
+
+3 Motion
+ - MapCollidable
+  - X Motion:
+     Friction
+  - Y Motion:
+     Gravity
+  - onCollision:
+     Top: come to a stop
+     Bottom: bounce back at a fixed speed
+     left/right: reverse directions
+
+  - SimpleCollisionRectangle:
+     width/height = { 16, 24, 32 }

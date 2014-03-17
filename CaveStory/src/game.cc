@@ -12,6 +12,7 @@
 #include "timer.h"
 
 #include "death_cloud_particle.h"
+#include "power_dorito_pickup.h"
 
 namespace {
 const units::FPS kFps = 60;
@@ -44,6 +45,9 @@ void Game::eventLoop() {
    bat_.reset(new FirstCaveBat(graphics, units::tileToGame(7), units::tileToGame(kScreenHeight / 2 + 1)));
    damage_texts_.addDamageable(bat_);
    map_.reset(Map::createTestMap(graphics));
+
+   pickups_.add(boost::shared_ptr<Pickup>(
+      new PowerDoritoPickup(graphics, 300, 200, PowerDoritoPickup::SMALL)));
 
    bool running = true;
    units::MS last_update_time = SDL_GetTicks();
@@ -120,6 +124,7 @@ void Game::eventLoop() {
 void Game::update(units::MS elapsed_time_ms, Graphics& graphics) {
    Timer::updateAll(elapsed_time_ms);
    damage_texts_.update(elapsed_time_ms);
+   pickups_.update(elapsed_time_ms, *map_);
    front_particle_system_.update(elapsed_time_ms);
    entity_particle_system_.update(elapsed_time_ms);
 
@@ -142,6 +147,8 @@ void Game::update(units::MS elapsed_time_ms, Graphics& graphics) {
       }
    }
 
+   pickups_.handleCollision(*player_);
+
    if (bat_ && bat_->damageRectangle().collidesWith(player_->damageRectangle())) {
       player_->takeDamage(bat_->contactDamage());
    }
@@ -154,6 +161,7 @@ void Game::draw(Graphics& graphics) {
    if (bat_)
       bat_->draw(graphics);
    entity_particle_system_.draw(graphics);
+   pickups_.draw(graphics);
    player_->draw(graphics);
    map_->draw(graphics);
    front_particle_system_.draw(graphics);
