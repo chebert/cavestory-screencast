@@ -13,6 +13,7 @@
 
 #include "death_cloud_particle.h"
 #include "power_dorito_pickup.h"
+#include "flashing_pickup.h"
 
 namespace {
 const units::FPS kFps = 60;
@@ -129,12 +130,11 @@ void Game::update(units::MS elapsed_time_ms, Graphics& graphics) {
    if (bat_) {
       if (!bat_->update(elapsed_time_ms, player_->center_x())) {
          ParticleTools particle_tools = { front_particle_system_, entity_particle_system_, graphics };
-         pickups_.add(boost::shared_ptr<Pickup>(
-            new PowerDoritoPickup(graphics,
-               bat_->center_x(), bat_->center_y(), PowerDoritoPickup::SMALL)));
          DeathCloudParticle::createRandomDeathClouds(particle_tools,
             bat_->center_x(), bat_->center_y(),
             3);
+         pickups_.add(FlashingPickup::heartPickup(
+                  graphics, bat_->center_x(), bat_->center_y()));
          bat_.reset();
       }
    }
