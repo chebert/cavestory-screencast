@@ -1,0 +1,46 @@
+Episode 58 - Heart Drops
+========================
+
+Problem:
+ - Enemies drop hearts for the player to recover
+ - 2 levels of hearts:
+  Single +2 HP
+  Multi  +6 HP
+
+Special Effect Flash:
+ - Starts off flashing between Red and White hearts
+ - Flash period steadily decreases
+ - For the last second
+   - rotates between
+      - Red heart
+      - White heart
+      - Invisible
+   - Flash period no longer changes
+ - For the few milliseconds: shows a white flash (from the death cloud)
+
+Solution:
+ - Pretty sure missiles are going to work the (exact?) same
+    - let's call our struct: FlashingPickup
+    - named constructors: heartPickup
+Line formula (for interpolating flash effect):
+ - y is the current flash period,
+ - x is the current life time
+ y = mx + b
+ current_flash_period = slope * current_life_time + start_flash_period
+ slope=(y2 - y1) / (x2 - x1)
+      =(end_flash_period - start_flash_period) / (flicker_time)
+
+Times:
+ - life time = 8 Seconds
+ - start flash period = 400 ms // start off flashing at 400 ms
+ - end flash period = 100 ms // but end up flashing at 100 ms
+ - Dissipate Time = life time - 25 ms // Show a white flash for the last few ms
+CollisionBox:
+ Single: x=5G, y=8G
+         w=21G,h=19G
+ Multi:  x=6G, y=7G
+         w=26G,h=25G
+Sprite:
+   RED: x=2T, y=5T
+   WHITE: x=+1T
+   FLASH: x=1T, y=0T
