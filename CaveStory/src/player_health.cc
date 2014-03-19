@@ -79,7 +79,24 @@ void Player::Health::draw(Graphics& graphics) {
 bool Player::Health::takeDamage(units::HP damage) {
    damage_ = damage;
    damage_timer_.reset();
-   health_fill_sprite_.set_percentage_width((current_health_ - damage) * 1.0f / max_health_);
-   damage_fill_sprite_.set_percentage_width(current_health_ * 1.0f / max_health_);
+   resetFillSprites();
    return false;
+}
+
+void Player::Health::addHealth(units::HP health) {
+   if (damage_ > health) {
+      damage_ -= health;
+      health = 0;
+   } else if (damage_ > 0) {
+      health -= damage_;
+      damage_ = 0;
+   }
+
+   current_health_ = std::min(max_health_, current_health_ + health);
+   resetFillSprites();
+}
+
+void Player::Health::resetFillSprites() {
+   health_fill_sprite_.set_percentage_width((current_health_ - damage_) * 1.0f / max_health_);
+   damage_fill_sprite_.set_percentage_width(current_health_ * 1.0f / max_health_);
 }
