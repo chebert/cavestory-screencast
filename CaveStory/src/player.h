@@ -103,7 +103,11 @@ struct Player : public Damageable,
 
       // returns true if we have died.
       bool takeDamage(units::HP damage);
+      void addHealth(units::HP health);
+
      private:
+      void resetFillSprites();
+
       units::HP damage_;
       Timer damage_timer_;
 

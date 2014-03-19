@@ -1,0 +1,22 @@
+Episode 59 - Collecting Health
+==============================
+
+Problem:
+ - What happens when the player collects health?
+
+Solution:
+ - if there is more damage than health
+       reduce damage
+ - if there is more health than damage
+       reduce damage to 0
+       increase health by the amount leftover
+ - if there is no damage
+       increase health
+
+ remember to update the fill sizes
+
+Multi-heart Pickup:
+ Value:      6
+ Sprite:     x=4T, y=5T
+ Collision:  x=6G, y=7G
+             w=26G,h=25G

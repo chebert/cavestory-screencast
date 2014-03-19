@@ -18,6 +18,9 @@ struct FlashingPickup : Pickup {
    static boost::shared_ptr<Pickup> heartPickup(
          Graphics& graphics,
          units::Game center_x, units::Game center_y);
+   static boost::shared_ptr<Pickup> multiHeartPickup(
+         Graphics& graphics,
+         units::Game center_x, units::Game center_y);
 
   private:
    FlashingPickup(

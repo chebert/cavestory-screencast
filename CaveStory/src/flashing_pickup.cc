@@ -18,6 +18,11 @@ const units::Tile kHeartSourceY = 5;
 const Rectangle kHeartRectangle(5, 8, 21, 19);
 const units::HP kHeartValue = 2;
 
+const units::Tile kMultiHeartSourceX = 4;
+const units::Tile kMultiHeartSourceY = 5;
+const Rectangle kMultiHeartRectangle(6, 7, 26, 25);
+const units::HP kMultiHeartValue = 6;
+
 const std::string kSpriteName("NpcSym");
 
 Rectangle FlashingPickup::collisionRectangle() const {
@@ -66,6 +71,20 @@ boost::shared_ptr<Pickup> FlashingPickup::heartPickup(
             kHeartValue,
             Pickup::HEALTH));
 }
+
+//static
+boost::shared_ptr<Pickup> FlashingPickup::multiHeartPickup(
+      Graphics& graphics,
+      units::Game center_x, units::Game center_y) {
+   return boost::shared_ptr<Pickup>(new FlashingPickup(
+            graphics,
+            center_x, center_y,
+            kMultiHeartSourceX, kMultiHeartSourceY,
+            kMultiHeartRectangle,
+            kMultiHeartValue,
+            Pickup::HEALTH));
+}
+
 FlashingPickup::FlashingPickup(
       Graphics& graphics,
       units::Game center_x, units::Game center_y,
