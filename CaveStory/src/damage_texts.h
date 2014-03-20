@@ -7,7 +7,7 @@
 
 #include "units.h"
 
-struct DamageText;
+struct FloatingNumber;
 struct Damageable;
 struct Graphics;
 
@@ -17,7 +17,7 @@ struct DamageTexts {
    void draw(Graphics& graphics);
 
   private:
-   typedef std::map<boost::shared_ptr<DamageText>, boost::weak_ptr<Damageable> > DamageTextMap;
+   typedef std::map<boost::shared_ptr<FloatingNumber>, boost::weak_ptr<Damageable> > DamageTextMap;
 
    DamageTextMap damage_text_map_;
 };

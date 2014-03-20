@@ -77,6 +77,3 @@ clean:
 # the content to load properly)
 run:
 	cd $(BINDIR) && ./$(EXECUTABLE)
-
-ctags:
-	ctags -R $(SRCDIR)/
