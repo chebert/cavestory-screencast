@@ -108,6 +108,10 @@ void PolarStar::collectExperience(units::GunExperience experience) {
                                   current_experience_);
 }
 
+void PolarStar::damageExperience(units::GunExperience experience) {
+   current_experience_ = std::max(0, current_experience_ - experience);
+}
+
 void PolarStar::startFire(units::Game player_x, units::Game player_y,
                           HorizontalFacing horizontal_facing,
                           VerticalFacing vertical_facing,

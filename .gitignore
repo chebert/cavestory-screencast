@@ -6,6 +6,7 @@ CaveStory/Debug
 gen/
 content
 tags
+cscope.*
 CaveStory.sln
 obj/
 .depend

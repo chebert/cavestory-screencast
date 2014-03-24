@@ -1,0 +1,25 @@
+Episode 60 - Experience Text
+============================
+
+Problem:
+ - How much exp did I just collect?
+
+Solution:
+ - FloatingNumber ... just like DamageText
+oh.
+    - DamageText     ==> FloatingNumber(DAMAGE)
+    - ExperienceText ==> FloatingNumber(EXPERIENCE)
+but then so?
+    - setDamage ==> addValue() (we are adding, not just setting)
+ahh. that's not so bad
+
+ - for experience, we'll need to update/setPosition!/draw ourselves
+   - (no DamageTexts to do it for us)
+
+1. rename files: damage_text.* ==> floating_number.*
+2. DamageText ==> FloatingNumber
+3. FloatingNumber(NumberType)
+4. setDamage ==> addValue
+
+and what about damage to our experience?
+ - ok let's damage our experience, too (2 per health)

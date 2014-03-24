@@ -27,6 +27,7 @@ struct PolarStar {
       units::Game x, units::Game y);
 
    void collectExperience(units::GunExperience experience);
+   void damageExperience(units::GunExperience experience);
    void startFire(units::Game player_x, units::Game player_y,
                   HorizontalFacing horizontal_facing, VerticalFacing vertical_facing,
                   bool gun_up, ParticleTools& particle_tools);

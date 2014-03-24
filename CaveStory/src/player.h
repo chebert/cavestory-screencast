@@ -10,7 +10,7 @@
 #include "number_sprite.h"
 #include "units.h"
 #include "timer.h"
-#include "damage_text.h"
+#include "floating_number.h"
 #include "damageable.h"
 #include "polar_star.h"
 #include "gun_experience_hud.h"
@@ -49,7 +49,7 @@ struct Player : public Damageable,
    Rectangle damageRectangle() const; 
    units::Game center_x() const { return kinematics_x_.position + units::kHalfTile; }
    units::Game center_y() const { return kinematics_y_.position + units::kHalfTile; }
-   boost::shared_ptr<DamageText> get_damage_text() { return damage_text_; }
+   boost::shared_ptr<FloatingNumber> get_damage_text() { return damage_text_; }
 
    std::vector<boost::shared_ptr<Projectile> > getProjectiles()
       { return polar_star_.getProjectiles(); }
@@ -150,7 +150,8 @@ struct Player : public Damageable,
 
    Health health_;
    Timer invincible_timer_;
-   boost::shared_ptr<DamageText> damage_text_;
+   boost::shared_ptr<FloatingNumber> damage_text_;
+   FloatingNumber experience_text_;
 
    WalkingAnimation walking_animation_;
 
