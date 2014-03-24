@@ -28,7 +28,7 @@ Map* Map::createTestMap(Graphics& graphics) {
             "PrtCave",
             units::tileToPixel(1), 0,
             units::tileToPixel(1), units::tileToPixel(1)));
-   Tile tile(WALL_TILE, sprite);
+   Tile tile(tiles::WALL_TILE, sprite);
    const units::Tile row = 11;
    for (units::Tile col = 0; col < num_cols; ++col) {
       map->tiles_[row][col] = tile;
@@ -62,7 +62,7 @@ Map* Map::createTestMap(Graphics& graphics) {
    return map;
 }
 
-vector<Map::CollisionTile> Map::getCollidingTiles(const Rectangle& rectangle) const {
+vector<CollisionTile> Map::getCollidingTiles(const Rectangle& rectangle) const {
    const units::Tile first_row = units::gameToTile(rectangle.top());
    const units::Tile last_row = units::gameToTile(rectangle.bottom());
    const units::Tile first_col = units::gameToTile(rectangle.left());

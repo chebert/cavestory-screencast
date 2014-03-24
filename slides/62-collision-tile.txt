@@ -1,0 +1,19 @@
+Episode 62 - Collision Tile
+===========================
+
+Problem:
+   Provide a "Collision Tile that can test [for] collision and determine
+   position of collision given a side" - Episode 61
+
+Implementation:
+   - use of boost::optional<T>
+      - T is either there or not there
+      - semantics are similar to boost::smart pointers
+      - naming convention (I use): maybe_variable
+      - boost::none is analagous to NULL
+
+   - struct CollisionTile
+   - testCollision()
+      - Takes in a SideType and a position
+      - returns boost::optonal<units::Game> representing the point of collision
+        if there was one, otherwise nothing!

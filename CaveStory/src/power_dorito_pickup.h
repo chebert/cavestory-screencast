@@ -23,8 +23,8 @@ struct PowerDoritoPickup : Pickup,
    PickupType type() const { return EXPERIENCE; }
 
   private:
-   void onCollision(SideType side, bool is_delta_direction);
-   void onDelta(SideType) {}
+   void onCollision(sides::SideType side, bool is_delta_direction);
+   void onDelta(sides::SideType) {}
 
    Kinematics kinematics_x_, kinematics_y_;
    AnimatedSprite sprite_;
