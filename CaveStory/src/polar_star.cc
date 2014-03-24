@@ -248,32 +248,25 @@ PolarStar::Projectile::Projectile(boost::shared_ptr<Sprite> sprite,
 bool PolarStar::Projectile::update(units::MS elapsed_time, const Map& map, ParticleTools& particle_tools) {
    offset_ += kProjectileSpeed * elapsed_time;
 
-   std::vector<Map::CollisionTile> colliding_tiles(
+   std::vector<CollisionTile> colliding_tiles(
       map.getCollidingTiles(collisionRectangle()));
    for (size_t i = 0; i < colliding_tiles.size(); ++i) {
-      if (colliding_tiles[i].tile_type == Map::WALL_TILE) {
-         const Rectangle tile_rectangle(
-            units::tileToGame(colliding_tiles[i].col),
-            units::tileToGame(colliding_tiles[i].row),
-            units::tileToGame(1), units::tileToGame(1));
-         units::Game particle_x, particle_y;
-         if (vertical_direction_ == HORIZONTAL) {
-            if (horizontal_direction_ == LEFT) {
-               particle_x = tile_rectangle.right();
-            } else {
-               particle_x = tile_rectangle.left();
-            }
-            particle_x -= units::kHalfTile;
-            particle_y = getY();
-         } else {
-            if (vertical_direction_ == UP) {
-               particle_y = tile_rectangle.bottom();
-            } else {
-               particle_y = tile_rectangle.top();
-            }
-            particle_y -= units::kHalfTile;
-            particle_x = getX();
-         }
+      const sides::SideType direction = sides::from_facing(
+            horizontal_direction_, vertical_direction_);
+      const sides::SideType side = sides::opposite_side(direction);
+      const units::Game position = sides::vertical(side) ?
+         getX() :
+         getY();
+      const boost::optional<units::Game> maybe_position(
+            colliding_tiles[i].testCollision(side, position));
+
+      if (maybe_position) {
+         const units::Game particle_x = sides::vertical(side) ?
+            position :
+            *maybe_position - units::kHalfTile;
+         const units::Game particle_y = sides::vertical(side) ?
+            *maybe_position - units::kHalfTile :
+            position;
          particle_tools.front_system.addNewParticle(boost::shared_ptr<Particle>(
             new ProjectileWallParticle(particle_tools.graphics, particle_x, particle_y)));
          return false;

@@ -10,6 +10,9 @@ struct Rectangle {
       width_(width),
       height_(height) {}
 
+   units::Game center_x() const { return x_ + width_ / 2; }
+   units::Game center_y() const { return y_ + height_ / 2; }
+
    units::Game left() const { return x_; }
    units::Game right() const { return x_ + width_; }
    units::Game top() const { return y_; }

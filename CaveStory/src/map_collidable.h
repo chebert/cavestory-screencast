@@ -1,6 +1,7 @@
 #ifndef MAP_COLLIDABLE_H_
 #define MAP_COLLIDABLE_H_
 
+#include "side_type.h"
 #include "units.h"
 
 struct Accelerator;
@@ -9,13 +10,6 @@ struct Kinematics;
 struct Map;
 
 struct MapCollidable {
-   enum SideType {
-      TOP_SIDE,
-      BOTTOM_SIDE,
-      LEFT_SIDE,
-      RIGHT_SIDE,
-   };
-
    void updateX(
       const CollisionRectangle& collision_rectangle,
       const Accelerator& accelerator,
@@ -27,8 +21,8 @@ struct MapCollidable {
       const Kinematics& kinematics_x, Kinematics& kinematics_y, 
       units::MS elapsed_time_ms, const Map& map);
 
-   virtual void onCollision(SideType side, bool is_delta_direction) = 0;
-   virtual void onDelta(SideType side) = 0;
+   virtual void onCollision(sides::SideType side, bool is_delta_direction) = 0;
+   virtual void onDelta(sides::SideType side) = 0;
 
    virtual ~MapCollidable() {}
 };

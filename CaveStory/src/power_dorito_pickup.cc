@@ -66,10 +66,10 @@ bool PowerDoritoPickup::update(units::MS elapsed_time, const Map& map) {
    return timer_.active();
 }
 
-void PowerDoritoPickup::onCollision(SideType side, bool /*is_delta_direction*/) {
-   if (side == TOP_SIDE) {
+void PowerDoritoPickup::onCollision(sides::SideType side, bool /*is_delta_direction*/) {
+   if (side == sides::TOP_SIDE) {
       kinematics_y_.velocity = 0.0f;
-   } else if (side == BOTTOM_SIDE) {
+   } else if (side == sides::BOTTOM_SIDE) {
       kinematics_y_.velocity = -kBounceSpeed;
    } else {
       kinematics_x_.velocity = - kinematics_x_.velocity;
