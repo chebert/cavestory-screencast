@@ -1,0 +1,15 @@
+Episode 63 - Cleanup MapCollidable
+==================================
+
+Problem:
+ - (Refactor): duplication in MapCollidable
+
+Solution:
+ - now we have abstracted CollisionTile
+ - Rectangle
+    - rectangle.side(SideType) const
+ - CollisionRectangle
+    - collision_rectangle.collision(side, ...) const
+ - MapCollidable
+    - update(..., Kinematics&, AxisType)
+       - same params as update(X|Y)
