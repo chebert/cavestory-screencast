@@ -25,6 +25,17 @@ struct MapCollidable {
    virtual void onDelta(sides::SideType side) = 0;
 
    virtual ~MapCollidable() {}
+  private:
+   enum AxisType {
+      X_AXIS,
+      Y_AXIS
+   };
+   void update(
+      const CollisionRectangle& collision_rectangle,
+      const Accelerator& accelerator,
+      const Kinematics& kinematics_x, const Kinematics& kinematics_y,
+      units::MS elapsed_time_ms, const Map& map,
+      Kinematics& kinematics, AxisType axis);
 };
 
 #endif // MAP_COLLIDABLE_H_
