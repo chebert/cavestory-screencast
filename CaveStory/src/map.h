@@ -15,6 +15,7 @@ struct Sprite;
 struct Rectangle;
 
 struct Map {
+   static Map* createSlopeTestMap(Graphics& graphics);
    static Map* createTestMap(Graphics& graphics);
 
    std::vector<CollisionTile> getCollidingTiles(const Rectangle& rectangle) const;
@@ -24,7 +25,7 @@ struct Map {
 
   private:
    struct Tile {
-      Tile(tiles::TileType tile_type = tiles::AIR_TILE,
+      Tile(tiles::TileType tile_type = tiles::TileType().set(tiles::EMPTY),
            boost::shared_ptr<Sprite> sprite = boost::shared_ptr<Sprite>()) :
          tile_type(tile_type),
          sprite(sprite) {}

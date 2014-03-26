@@ -5,7 +5,7 @@ using namespace sides;
 boost::optional<units::Game> CollisionTile::testCollision(
       sides::SideType side,
       units::Game /*position*/) const {
-   if (tile_type_ == tiles::WALL_TILE) {
+   if (tile_type_[tiles::WALL]) {
       if (side == TOP_SIDE)
          return units::tileToGame(row_);
       if (side == BOTTOM_SIDE)

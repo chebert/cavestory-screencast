@@ -45,7 +45,7 @@ void Game::eventLoop() {
    damage_texts_.addDamageable(player_);
    bat_.reset(new FirstCaveBat(graphics, units::tileToGame(7), units::tileToGame(kScreenHeight / 2 + 1)));
    damage_texts_.addDamageable(bat_);
-   map_.reset(Map::createTestMap(graphics));
+   map_.reset(Map::createSlopeTestMap(graphics));
 
    for (int i = 0; i < 3; ++i) {
       pickups_.add(boost::shared_ptr<Pickup>(new PowerDoritoPickup(

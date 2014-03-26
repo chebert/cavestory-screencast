@@ -1,0 +1,20 @@
+Episode 64 - Slope Playground
+=============================
+
+Problem:
+ - Let's define "A TileType to determine empty/slope/wall as well as what type
+   of slope" - Episode 61
+ - Let's make a playground to test our slopes
+
+Solution:
+ - typedef std::bitset<MAX_BOOLS> TileType;
+    - a more compact vector of bools
+    - tile_type.set(index) // sets the bool at index to true.
+                           // can be chained
+    - bool tile_type[index] // returns the bool at index
+
+ - Flags
+  - EMPTY/WALL/SLOPE
+  - LEFT_SLOPE/RIGHT_SLOPE
+  - TOP_SLOPE/BOTTOM_SLOPE
+  - TALL_SLOPE/SHORT_SLOPE
