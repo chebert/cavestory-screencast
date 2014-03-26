@@ -1,0 +1,30 @@
+Episode 65 - Collision Order
+============================
+
+Problem:
+ - improve Collision Order
+
+Solution:
+ - Collision Order (from Episode 61)
+   if horizontal(direction):
+      - primary sort COLS in direction
+      - secondary sort rows favoring center_x
+   if vertical(side):
+      - primary sort ROWS in direction
+      - secondary sort cols favoring center_y
+
+ - getCollidingTiles needs a direction, now, too
+
+ - what do I mean by sort?
+    - I mean insertion order
+    - for first_primary : last_primary
+       - for first_secondary : last_secondary
+
+ - secondary sort:
+    - how to favor center (x or y)?
+     calculate min, mid, and max as tile units
+     if distance between min&mid is greater than mid&max
+        then
+           mid is closer to max, so we start with max
+        else
+           start with min
