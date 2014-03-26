@@ -18,7 +18,9 @@ struct Map {
    static Map* createSlopeTestMap(Graphics& graphics);
    static Map* createTestMap(Graphics& graphics);
 
-   std::vector<CollisionTile> getCollidingTiles(const Rectangle& rectangle) const;
+   std::vector<CollisionTile> getCollidingTiles(
+         const Rectangle& rectangle,
+         sides::SideType direction) const;
 
    void drawBackground(Graphics& graphics) const;
    void draw(Graphics& graphics) const;
