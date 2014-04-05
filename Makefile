@@ -23,7 +23,7 @@ CFLAGS=-g -Wall -Wextra -std=c++03 -MMD
 # ``=run a shell command (command substitution)
 # sdl-config=a command that generates the load libs/cflags necessary depending
 # on the platform (OS/Linux/Win)
-LDLIBS=`sdl-config --cflags --libs`
+LDLIBS=`sdl-config --cflags --libs` -lboost_system -lboost_filesystem
 
 # LDFLAGS (Load/linker flags)
 LDFLAGS=
