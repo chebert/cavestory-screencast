@@ -1,5 +1,6 @@
 #include "graphics.h"
 
+#include <boost/filesystem.hpp>
 #include <SDL/SDL.h>
 
 #include "game.h"
@@ -33,10 +34,17 @@ Graphics::SurfaceID Graphics::loadImage(const std::string& file_name, bool black
    // if we have not loaded in the spritesheet
    if (sprite_sheets_.count(file_path) == 0) {
       // load it in now
-      sprite_sheets_[file_path] = SDL_LoadBMP(file_path.c_str());
+      SDL_Surface* image = SDL_LoadBMP(file_path.c_str());
+      if (!image) {
+         fprintf(stderr, "\nCould not load image: %s\nRelative to:          %s\n\n",
+               file_path.c_str(),
+               boost::filesystem::initial_path().c_str());
+         exit(EXIT_FAILURE);
+      }
+      sprite_sheets_[file_path] = image;
       if (black_is_transparent) {
-         const Uint32 black_color = SDL_MapRGB(sprite_sheets_[file_path]->format, 0, 0, 0);
-         SDL_SetColorKey(sprite_sheets_[file_path], SDL_SRCCOLORKEY, black_color);
+         const Uint32 black_color = SDL_MapRGB(image->format, 0, 0, 0);
+         SDL_SetColorKey(image, SDL_SRCCOLORKEY, black_color);
       }
    }
    return sprite_sheets_[file_path];
