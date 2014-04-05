@@ -15,11 +15,14 @@ optional<units::Game> testMapCollision(
    std::vector<CollisionTile> tiles(map.getCollidingTiles(rectangle, direction));
    for (size_t i = 0; i < tiles.size(); ++i) {
       const sides::SideType side = sides::opposite_side(direction);
-      const units::Game position = sides::vertical(side) ?
+      const units::Game perpendicular_position = sides::vertical(side) ?
          rectangle.center_x() :
          rectangle.center_y();
+      const units::Game leading_position = rectangle.side(direction);
+      const bool should_test_slopes = sides::vertical(side);
       const optional<units::Game> maybe_position(
-            tiles[i].testCollision(side, position));
+            tiles[i].testCollision(
+               side, perpendicular_position, leading_position, should_test_slopes));
       if (maybe_position) {
          return maybe_position;
       }

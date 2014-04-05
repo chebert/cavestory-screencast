@@ -3,6 +3,8 @@
 
 #include <bitset>
 
+#include "side_type.h"
+
 namespace tiles {
    enum TileFlag {
       EMPTY,
@@ -20,6 +22,16 @@ namespace tiles {
       LAST_TILE_FLAG
    };
    typedef std::bitset<LAST_TILE_FLAG> TileType;
+
+   inline TileFlag slope_flag_from_side(sides::SideType side) {
+      if (side == sides::LEFT_SIDE)
+         return LEFT_SLOPE;
+      if (side == sides::RIGHT_SIDE)
+         return RIGHT_SLOPE;
+      if (side == sides::TOP_SIDE)
+         return TOP_SLOPE;
+      return BOTTOM_SLOPE;
+   }
 }
 
 #endif // TILE_TYPE_H_

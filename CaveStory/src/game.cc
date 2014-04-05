@@ -47,12 +47,14 @@ void Game::eventLoop() {
    damage_texts_.addDamageable(bat_);
    map_.reset(Map::createSlopeTestMap(graphics));
 
+   /*
    for (int i = 0; i < 3; ++i) {
       pickups_.add(boost::shared_ptr<Pickup>(new PowerDoritoPickup(
                   graphics,
                   bat_->center_x(), bat_->center_y(),
                   PowerDoritoPickup::MEDIUM)));
    }
+   */
 
    bool running = true;
    units::MS last_update_time = SDL_GetTicks();
