@@ -17,10 +17,14 @@ struct CollisionTile {
    // otherwise the position of the collision on the same axis of side
    //
    // side: the side of the tile that is being collided with
-   // position: the position on the tile on the opposite axis of side
+   // perpendicular_position: the position on the tile on the opposite axis of side
+   // leading_position: position of the leading edge of the colliding entity
+   // should_test_slopes: whether slopes should be considered for collision
    boost::optional<units::Game> testCollision(
          sides::SideType side,
-         units::Game position) const;
+         units::Game perpendicular_position,
+         units::Game leading_position,
+         bool should_test_slopes) const;
 
   private:
    units::Tile row_, col_;

@@ -334,10 +334,14 @@ void Player::updateY(units::MS elapsed_time_ms, const Map& map) {
 void Player::onCollision(sides::SideType side, bool is_delta_direction) {
    switch (side) {
       case sides::TOP_SIDE:
-         if (is_delta_direction)
+         if (is_delta_direction) {
             kinematics_y_.velocity = 0.0f;
-         particle_tools_.front_system.addNewParticle(boost::shared_ptr<Particle>(
-            new HeadBumpParticle(particle_tools_.graphics, center_x(), kinematics_y_.position + kCollisionRectangle.boundingBox().top())));
+            particle_tools_.front_system.addNewParticle(boost::shared_ptr<Particle>(
+               new HeadBumpParticle(
+                  particle_tools_.graphics,
+                  center_x(),
+                  kinematics_y_.position + kCollisionRectangle.boundingBox().top())));
+         }
          break;
       case sides::BOTTOM_SIDE:
          on_ground_ = true;

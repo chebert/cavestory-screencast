@@ -1,0 +1,49 @@
+Episode 66 - General Slopes
+===========================
+
+Problem:
+ - Implement General Formula for slopes
+
+Solution:
+ - General Formulas (from Episode 61)
+   y = slope * (x - col) + offset + row
+                |- perpendicular_position
+   x = (y - row - offset) / slope + col
+        |- perpendicular_position
+
+   row,col,tile_type: stored in CollisionTile
+   offset,slope: calculated from tile_type
+
+ - one of two checks for collision
+    calculated_position=calculated position (y or x)
+    leading_position=position of the leading edge of the colliding entity
+    side=the side of the TILE being collided with
+    is_max_side?=side is BOTTOM or RIGHT (further along in the axis)
+
+    if is_max_side? side
+       leading_position <= calculated_position
+    else
+       leading_position >= calculated_position
+
+    example:
+      Projectile is going LEFT
+         Projectile's leading position is its LEFT side
+      side we are checking is RIGHT
+         calculated position represents the right side
+      since RIGHT is the max of (LEFT|RIGHT)
+         collision occurs if leading position is <= calculated position
+
+slope Tiles
++0.5  RIGHT-TOP, LEFT-BOTTOM
+-0.5  LEFT-TOP , RIGHT-BOTTOM
+
+offset Tiles
+1T     LEFT-TOP-TALL   , RIGHT-BOTTOM-SHORT
+0T     LEFT-BOTTOM-TALL, RIGHT-TOP-SHORT
+0.5T   (Everything else)
+
+|\
+| \
+___\
+LEFT-BOTTOM
+LEFT and BOTTOM Sides are invalid
