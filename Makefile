@@ -16,14 +16,15 @@ OBJECTS=$(patsubst %.cc,$(OBJDIR)/%.o,$(SRCS))
 # -std=c++03=Enforce C++03 standard compliance. (You could also use C++11 if you
 #  want to be more up-to-date).
 # -MMD=Create a .d file to store the rule for the header dependencies of each object.
-CFLAGS=-g -Wall -Wextra -std=c++03 -MMD
+# -sdl-config=adds cflags needed by SDL
+CFLAGS=-g -Wall -Wextra -std=c++03 -MMD `sdl-config --cflags`
 
 # LDLIBS (Load Libraries)
 # External libraries you are using that need to be linked.
 # ``=run a shell command (command substitution)
 # sdl-config=a command that generates the load libs/cflags necessary depending
 # on the platform (OS/Linux/Win)
-LDLIBS=`sdl-config --cflags --libs` -lboost_system -lboost_filesystem
+LDLIBS=`sdl-config --libs` -lboost_system -lboost_filesystem
 
 # LDFLAGS (Load/linker flags)
 LDFLAGS=
