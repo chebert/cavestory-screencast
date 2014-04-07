@@ -71,7 +71,7 @@ Player::Player(Graphics& graphics, ParticleTools& particle_tools, units::Game x,
    acceleration_x_(0),
    horizontal_facing_(LEFT),
    intended_vertical_facing_(HORIZONTAL),
-   on_ground_(false),
+   maybe_ground_tile_(boost::none),
    jump_active_(false),
    interacting_(false),
    health_(graphics),
@@ -328,10 +328,10 @@ void Player::updateY(units::MS elapsed_time_ms, const Map& map) {
    const Accelerator& accelerator = jump_active_ && kinematics_y_.velocity < 0.0f ?
       kJumpGravityAccelerator : ConstantAccelerator::kGravity;
 
-   MapCollidable::updateY(kCollisionRectangle, accelerator, kinematics_x_, kinematics_y_, elapsed_time_ms, map);
+   MapCollidable::updateY(kCollisionRectangle, accelerator, kinematics_x_, kinematics_y_, elapsed_time_ms, map, maybe_ground_tile_);
 }
 
-void Player::onCollision(sides::SideType side, bool is_delta_direction) {
+void Player::onCollision(sides::SideType side, bool is_delta_direction, const tiles::TileType& tile_type) {
    switch (side) {
       case sides::TOP_SIDE:
          if (is_delta_direction) {
@@ -344,7 +344,7 @@ void Player::onCollision(sides::SideType side, bool is_delta_direction) {
          }
          break;
       case sides::BOTTOM_SIDE:
-         on_ground_ = true;
+         maybe_ground_tile_ = boost::make_optional(tile_type);
          if (is_delta_direction)
             kinematics_y_.velocity = 0.0f;
          break;
@@ -362,10 +362,8 @@ void Player::onCollision(sides::SideType side, bool is_delta_direction) {
 void Player::onDelta(sides::SideType side) {
    switch (side) {
       case sides::TOP_SIDE:
-         on_ground_ = false;
-         break;
       case sides::BOTTOM_SIDE:
-         on_ground_ = false;
+         maybe_ground_tile_ = boost::none;
          break;
       case sides::LEFT_SIDE:
          break;

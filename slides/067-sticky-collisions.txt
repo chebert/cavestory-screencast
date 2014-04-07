@@ -1,0 +1,33 @@
+Episode 67 - Sticky Collisions
+==============================
+
+Problem:
+ - Quote needs to stick to slopes as he is going down
+ - See Ep. 61
+
+Solution:
+ - When do we stick?
+   (Algorithm from ep 61)
+ - If grounded on a slope AND
+      intersecting with a slope tile
+
+ - If grounded on a wall AND
+      intersecting with tall slope tile
+
+ - If grounded on a short slope AND
+      intersecting with an empty tile AND
+      the tile below the empty tile is not empty
+   - Just kidding about this one. Collision order takes care of it.
+
+Sub-Problem 1:
+ - what are we grounded on?
+
+Solution:
+ - Store in player class as boost::optional<TileType>
+
+Sub-Problem 2:
+ - When do we do our check?
+
+Solution:
+ - only if we are going down
+ - immediately after we have checked for a "real" collision
