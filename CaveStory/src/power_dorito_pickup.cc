@@ -58,15 +58,15 @@ void PowerDoritoPickup::draw(Graphics& graphics) {
 bool PowerDoritoPickup::update(units::MS elapsed_time, const Map& map) {
    sprite_.update();
 
-   MapCollidable::updateY(kCollisionRectangles[size_], ConstantAccelerator::kGravity,
-      kinematics_x_, kinematics_y_, elapsed_time, map);
    MapCollidable::updateX(kCollisionRectangles[size_], kFriction,
       kinematics_x_, kinematics_y_, elapsed_time, map);
+   MapCollidable::updateY(kCollisionRectangles[size_], ConstantAccelerator::kGravity,
+      kinematics_x_, kinematics_y_, elapsed_time, map, boost::none);
 
    return timer_.active();
 }
 
-void PowerDoritoPickup::onCollision(sides::SideType side, bool /*is_delta_direction*/) {
+void PowerDoritoPickup::onCollision(sides::SideType side, bool /*is_delta_direction*/, const tiles::TileType& tile_type) {
    if (side == sides::TOP_SIDE) {
       kinematics_y_.velocity = 0.0f;
    } else if (side == sides::BOTTOM_SIDE) {

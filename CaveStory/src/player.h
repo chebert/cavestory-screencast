@@ -1,6 +1,9 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
+#include <boost/optional.hpp>
+
+#include "tile_type.h"
 #include "kinematics.h"
 #include "map_collidable.h"
 #include "sprite.h"
@@ -125,13 +128,13 @@ struct Player : public Damageable,
    void updateX(units::MS elapsed_time_ms, const Map& map);
    void updateY(units::MS elapsed_time_ms, const Map& map);
 
-   void onCollision(sides::SideType side, bool is_delta_direction);
+   void onCollision(sides::SideType side, bool is_delta_direction, const tiles::TileType& tile_type);
    void onDelta(sides::SideType side);
 
    bool spriteIsVisible() const;
 
    MotionType motionType() const;
-   bool on_ground() const { return on_ground_; }
+   bool on_ground() const { return maybe_ground_tile_; }
    bool gun_up() const
       { return motionType() == WALKING && walking_animation_.stride() != STRIDE_MIDDLE; }
    VerticalFacing vertical_facing() const {
@@ -144,7 +147,7 @@ struct Player : public Damageable,
    int acceleration_x_;
    HorizontalFacing horizontal_facing_;
    VerticalFacing intended_vertical_facing_;
-   bool on_ground_;
+   boost::optional<tiles::TileType> maybe_ground_tile_;
    bool jump_active_;
    bool interacting_;
 
