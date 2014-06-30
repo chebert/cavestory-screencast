@@ -23,9 +23,9 @@ const units::Velocity kBounceSpeed = 0.225f;
 
 const FrictionAccelerator kFriction(0.00002f);
 const SimpleCollisionRectangle kCollisionRectangles[] = {
+   SimpleCollisionRectangle(Rectangle(12, 12, 8, 8)),
    SimpleCollisionRectangle(Rectangle(8, 8, 16, 16)),
-   SimpleCollisionRectangle(Rectangle(4, 4, 24, 24)),
-   SimpleCollisionRectangle(Rectangle(0, 0, 32, 32))
+   SimpleCollisionRectangle(Rectangle(4, 4, 24, 24))
 };
 
 PowerDoritoPickup::PowerDoritoPickup(Graphics& graphics,
