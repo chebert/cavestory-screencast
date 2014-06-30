@@ -3,12 +3,10 @@
 #include <string>
 
 const units::MS kLifeTime = 8000;
-const units::MS kStartPeriod = 400;
-const units::MS kEndPeriod = 75*3;
-const units::MS kFlickerPeriod = 75;
+const units::MS kFlashPeriod = 60;
 const units::MS kFlickerTime = kLifeTime - 1000;
+const units::MS kFlickerPeriod = 50;
 const units::MS kDissipateTime = kLifeTime - 25;
-const float kFlashInterpolation = (kEndPeriod*1.0f - kStartPeriod*1.0f) / kFlickerTime;
 
 const units::Tile kDissipatingSourceX = 1;
 const units::Tile kDissipatingSourceY = 0;
@@ -34,16 +32,11 @@ Rectangle FlashingPickup::collisionRectangle() const {
 }
 
 void FlashingPickup::draw(Graphics& graphics) {
-   if (timer_.current_time() > kDissipateTime) {
+   units::MS time = timer_.current_time();
+   if (time > kDissipateTime) {
       dissipating_sprite_.draw(graphics, x_, y_);
-   } else if (timer_.current_time() > kFlickerTime) {
-      if (timer_.current_time() / flash_period_ % 3 == 0) {
-         sprite_.draw(graphics, x_, y_);
-      } else if (timer_.current_time() / flash_period_ % 3 == 1) {
-         flash_sprite_.draw(graphics, x_, y_);
-      }
-   } else {
-      if (timer_.current_time() / flash_period_ % 2 == 0) {
+   } else if (time < kFlickerTime || time / kFlickerPeriod % 2 == 0) {
+      if (time / kFlashPeriod % 2 == 0) {
          sprite_.draw(graphics, x_, y_);
       } else {
          flash_sprite_.draw(graphics, x_, y_);
@@ -52,10 +45,6 @@ void FlashingPickup::draw(Graphics& graphics) {
 }
 
 bool FlashingPickup::update(units::MS, const Map&) {
-   flash_period_ = timer_.current_time() < kFlickerTime ?
-      kFlashInterpolation * timer_.current_time() + kStartPeriod :
-      kFlickerPeriod;
-
    return timer_.active();
 }
 
@@ -106,7 +95,6 @@ FlashingPickup::FlashingPickup(
          units::tileToPixel(1), units::tileToPixel(1)),
    x_(center_x - units::kHalfTile), y_(center_y - units::kHalfTile),
    timer_(kLifeTime, true),
-   flash_period_(kStartPeriod),
    rectangle_(rectangle),
    value_(value),
    type_(type) {}

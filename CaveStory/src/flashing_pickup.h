@@ -34,7 +34,6 @@ struct FlashingPickup : Pickup {
    Sprite sprite_, flash_sprite_, dissipating_sprite_;
    units::Game x_, y_;
    Timer timer_;
-   units::MS flash_period_;
 
    const Rectangle& rectangle_;
    const int value_;
