@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include "config.h"
+#include "vector2d.h"
 
 namespace units {
 
@@ -65,5 +66,12 @@ inline Pixel tileToPixel(Tile tile) {
 const Game kHalfTile = tileToGame(1) / 2.0f;
 
 } // units
+
+typedef Vector2D<units::Tile> Tile2D;
+
+typedef Vector2D<units::Game> Position2D;
+typedef Vector2D<units::Game> Dimensions2D; 
+
+typedef Vector2D<units::Velocity> Velocity2D; 
 
 #endif // UNITS_H_
