@@ -1,0 +1,22 @@
+Episode 68 - 2D Data Structures
+===============================
+
+Problem:
+ - Position, Velocity, Kinematics all come in x,y pairs.
+
+Solution:
+ - templatized Vector2D with +,-,*,/
+   - also want to convert between different Vector2D types using our
+     tileToGame et al
+   - Will involve function pointers. Don't worry, it isn't too unfamiliar.
+ - Kinematics2D
+   - Not having +,- etc. but still has x,y
+   - getters for position() and velocity()
+
+What about Power Doritos?
+
+yes. they are still buggy.
+We are going to clean up our map collidable a lot before we fix that.
+You'll all see.
+
+It'll be ok.

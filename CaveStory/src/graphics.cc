@@ -1,6 +1,8 @@
 #include "graphics.h"
 
+#ifndef _WIN32
 #include <boost/filesystem.hpp>
+#endif
 #include <SDL/SDL.h>
 
 #include "game.h"
@@ -36,9 +38,11 @@ Graphics::SurfaceID Graphics::loadImage(const std::string& file_name, bool black
       // load it in now
       SDL_Surface* image = SDL_LoadBMP(file_path.c_str());
       if (!image) {
+#ifndef _WIN32
          fprintf(stderr, "\nCould not load image: %s\nRelative to:          %s\n\n",
                file_path.c_str(),
                boost::filesystem::initial_path().c_str());
+#endif
          exit(EXIT_FAILURE);
       }
       sprite_sheets_[file_path] = image;
