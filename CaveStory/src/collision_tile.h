@@ -31,6 +31,7 @@ struct CollisionTile {
          bool should_test_slopes) const;
 
    tiles::TileType tile_type() const { return tile_type_; }
+   Tile2D position() const { return Tile2D(col_, row_); }
 
   private:
    units::Tile row_, col_;

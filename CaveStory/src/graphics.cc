@@ -6,6 +6,7 @@
 #include <SDL/SDL.h>
 
 #include "game.h"
+#include "rectangle.h"
 
 namespace {
 const int kBitsPerPixel = 32;
@@ -61,6 +62,28 @@ void Graphics::blitSurface(
    SDL_BlitSurface(source, source_rectangle, screen_, destination_rectangle);
 }
 
+void Graphics::drawRect(const Rectangle& rectangle,
+   unsigned char r,
+   unsigned char g,
+   unsigned char b) {
+   SDL_Rect dest_rect = { 
+      units::gameToPixel(rectangle.left()),
+      units::gameToPixel(rectangle.top()),
+      units::gameToPixel(rectangle.width()),
+      units::gameToPixel(rectangle.height())
+   };
+   SDL_FillRect(screen_, &dest_rect, SDL_MapRGB(screen_->format, r, g, b));
+}
+
+void Graphics::drawRectOutline(const Rectangle& rectangle, units::Game thickness,
+   unsigned char r,
+   unsigned char g,
+   unsigned char b) {
+   drawRect(Rectangle(rectangle.left(), rectangle.top(), rectangle.width(), thickness), r, g, b);
+   drawRect(Rectangle(rectangle.right() - thickness, rectangle.top(), thickness, rectangle.height()), r, g, b);
+   drawRect(Rectangle(rectangle.left(), rectangle.bottom() - thickness, rectangle.width(), thickness), r, g, b);
+   drawRect(Rectangle(rectangle.left(), rectangle.top(), thickness, rectangle.height()), r, g, b);
+}
 void Graphics::clear() {
    SDL_FillRect(screen_, NULL/*destination_rectangle*/, 0/*color*/);
 }

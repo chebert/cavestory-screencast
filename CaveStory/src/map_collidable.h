@@ -2,6 +2,7 @@
 #define MAP_COLLIDABLE_H_
 
 #include <boost/optional.hpp>
+#include <vector>
 
 #include "side_type.h"
 #include "tile_type.h"
@@ -29,6 +30,10 @@ struct MapCollidable {
    virtual void onDelta(sides::SideType side) = 0;
 
    virtual ~MapCollidable() {}
+
+
+   static std::vector<Tile2D> _debug_colliding_tiles;
+   static std::vector<Tile2D> _debug_opposite_colliding_tiles;
   private:
    enum AxisType {
       X_AXIS,

@@ -4,6 +4,9 @@
 #include <map>
 #include <string>
 
+#include "units.h"
+
+struct Rectangle;
 struct SDL_Surface;
 struct SDL_Rect;
 
@@ -19,6 +22,15 @@ struct Graphics {
          SurfaceID source,
          SDL_Rect* source_rectangle,
          SDL_Rect* destination_rectangle);
+
+   void drawRect(const Rectangle& rectangle,
+      unsigned char r,
+      unsigned char g,
+      unsigned char b);
+   void drawRectOutline(const Rectangle& rectangle, units::Game thickness,
+      unsigned char r,
+      unsigned char g,
+      unsigned char b);
 
    void clear();
    void flip();

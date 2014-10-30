@@ -1,0 +1,28 @@
+Episode 69 - Debugging Bounce Collisions
+========================================
+
+Problem:
+ - Discover why Doritos bounce right through the floor.
+
+Solution:
+ - My debugging process:
+
+ - Make the problem repeatable
+   1. fix the timestep (make sure you do this first)
+   2. remove randomness
+      -provide srand with a seed, and you will get the same sequence of random values
+      -e.g. srand(23)
+            1st: rand() => 32
+            2nd: rand() => 768
+            3rd: rand() => 0
+     1414120858
+
+ - Make the problem easy to recognize
+   - control time with a keypress
+      - p => hold to play
+      - n => play one frame
+      - (right now we can only look forward in time, since we aren't recording game states)
+   - make all collisions visual, by outlining which tile is being collided with
+   - if necessary, remove clutter:
+      - only need one dorito
+      - don't need the bat or the player

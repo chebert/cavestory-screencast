@@ -5,6 +5,11 @@
 #include "units.h"
 
 struct Rectangle {
+   Rectangle(const Position2D& position, const Dimensions2D& dimensions) :
+      x_(position.x),
+      y_(position.y),
+      width_(dimensions.x),
+      height_(dimensions.y) {}
    Rectangle(units::Game x, units::Game y, units::Game width, units::Game height) :
       x_(x),
       y_(y),

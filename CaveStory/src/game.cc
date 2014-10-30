@@ -26,7 +26,8 @@ units::Tile Game::kScreenWidth = 20;
 units::Tile Game::kScreenHeight = 15;
 
 Game::Game() {
-   srand(static_cast<unsigned int>(time(NULL)));
+   unsigned int seed = 1414122720;
+   srand(seed);
    SDL_Init(SDL_INIT_EVERYTHING);
    eventLoop();
 }
@@ -47,14 +48,10 @@ void Game::eventLoop() {
    damage_texts_.addDamageable(bat_);
    map_.reset(Map::createSlopeTestMap(graphics));
 
-   /*
-   for (int i = 0; i < 3; ++i) {
-      pickups_.add(boost::shared_ptr<Pickup>(new PowerDoritoPickup(
-                  graphics,
-                  bat_->center_x(), bat_->center_y(),
-                  PowerDoritoPickup::MEDIUM)));
-   }
-   */
+   pickups_.add(boost::shared_ptr<Pickup>(new PowerDoritoPickup(
+               graphics,
+               bat_->center_x(), bat_->center_y(),
+               PowerDoritoPickup::MEDIUM)));
 
    bool running = true;
    units::MS last_update_time = SDL_GetTicks();
@@ -114,10 +111,17 @@ void Game::eventLoop() {
          player_->stopJump();
       }
 
+      /*
       const units::MS current_time_ms = SDL_GetTicks();
       const units::MS elapsed_time = current_time_ms - last_update_time;
       update(std::min(elapsed_time, kMaxFrameTime), graphics);
       last_update_time = current_time_ms;
+      */
+      if (input.isKeyHeld(SDLK_p) || input.wasKeyPressed(SDLK_n)) {
+         MapCollidable::_debug_colliding_tiles.clear();
+         MapCollidable::_debug_opposite_colliding_tiles.clear();
+         update(1000 / kFps, graphics);
+      }
 
       draw(graphics);
       const units::MS ms_per_frame = 1000/*ms*/ / kFps;
@@ -170,10 +174,22 @@ void Game::draw(Graphics& graphics) {
    if (bat_)
       bat_->draw(graphics);
    entity_particle_system_.draw(graphics);
-   pickups_.draw(graphics);
+   //pickups_.draw(graphics);
    player_->draw(graphics);
    map_->draw(graphics);
    front_particle_system_.draw(graphics);
+
+   pickups_.draw(graphics);
+   for (size_t i = 0; i < MapCollidable::_debug_colliding_tiles.size(); ++i) {
+      Position2D position = MapCollidable::_debug_colliding_tiles[i].convert(units::tileToGame);
+      Rectangle rect(position, Tile2D(1).convert(units::tileToGame));
+      graphics.drawRectOutline(rect, 4, 255, 0, 0);
+   }
+   for (size_t i = 0; i < MapCollidable::_debug_opposite_colliding_tiles.size(); ++i) {
+      Position2D position = MapCollidable::_debug_opposite_colliding_tiles[i].convert(units::tileToGame);
+      Rectangle rect(position, Tile2D(1).convert(units::tileToGame));
+      graphics.drawRectOutline(rect, 4, 0, 255, 0);
+   }
 
    damage_texts_.draw(graphics);
    player_->drawHUD(graphics);

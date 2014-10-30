@@ -7,9 +7,13 @@
 
 using boost::optional;
 
+std::vector<Tile2D> MapCollidable::_debug_colliding_tiles;
+std::vector<Tile2D> MapCollidable::_debug_opposite_colliding_tiles;
+
 namespace {
    struct CollisionInfo {
       units::Game position;
+      Tile2D tile_position;
       tiles::TileType tile_type;
    };
    optional<CollisionInfo> testMapCollision(
@@ -29,7 +33,7 @@ namespace {
                tiles[i].testCollision(
                   side, perpendicular_position, leading_position, should_test_slopes));
          if (test_info.is_colliding) {
-            const CollisionInfo info = { test_info.position, tiles[i].tile_type() };
+            const CollisionInfo info = { test_info.position, tiles[i].position(), tiles[i].tile_type() };
             return info;
          } else if (maybe_ground_tile && direction == sides::BOTTOM_SIDE) {
             const tiles::TileType tall_slope =
@@ -38,7 +42,7 @@ namespace {
                 tiles[i].tile_type()[tiles::SLOPE]) ||
                 (maybe_ground_tile->test(tiles::WALL) &&
                  (tall_slope & tiles[i].tile_type()) == tall_slope)) {
-               const CollisionInfo info = { test_info.position, tiles[i].tile_type() };
+               const CollisionInfo info = { test_info.position, tiles[i].position(), tiles[i].tile_type() };
                return info;
             }
          }
@@ -99,6 +103,7 @@ void MapCollidable::update(
       // React to collision
       if (maybe_info) {
          kinematics.position = maybe_info->position - collision_rectangle.boundingBox().side(direction);
+         _debug_colliding_tiles.push_back(maybe_info->tile_position);
          onCollision(direction, true, maybe_info->tile_type);
       } else {
          kinematics.position += delta;
@@ -115,6 +120,7 @@ void MapCollidable::update(
          boost::none);
    if (maybe_info) {
       kinematics.position = maybe_info->position - collision_rectangle.boundingBox().side(opposite_direction);
+      _debug_opposite_colliding_tiles.push_back(maybe_info->tile_position);
       onCollision(opposite_direction, false, maybe_info->tile_type);
    }
 }
