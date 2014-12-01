@@ -65,6 +65,7 @@ const units::MS kInvincibleTime = 3000;
 }
 
 Player::Player(Graphics& graphics, ParticleTools& particle_tools, units::Game x, units::Game y) :
+   MapCollidable(MapCollidable::STICKY_COLLISION),
    particle_tools_(particle_tools),
    kinematics_x_(x, 0.0f),
    kinematics_y_(y, 0.0f),

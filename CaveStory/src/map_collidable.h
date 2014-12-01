@@ -14,6 +14,13 @@ struct Kinematics;
 struct Map;
 
 struct MapCollidable {
+   enum CollisionType {
+      BOUNCING_COLLISION,
+      STICKY_COLLISION
+   };
+
+   MapCollidable(CollisionType collision_type) : collision_type_(collision_type) {}
+
    void updateX(
       const CollisionRectangle& collision_rectangle,
       const Accelerator& accelerator,
@@ -46,6 +53,8 @@ struct MapCollidable {
       units::MS elapsed_time_ms, const Map& map,
       const boost::optional<tiles::TileType>& maybe_ground_tile,
       Kinematics& kinematics, AxisType axis);
+
+   CollisionType collision_type_;
 };
 
 #endif // MAP_COLLIDABLE_H_

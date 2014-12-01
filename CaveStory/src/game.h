@@ -24,6 +24,7 @@ struct Game {
    void eventLoop();
    void update(units::MS elapsed_time_ms, Graphics& graphics);
    void draw(Graphics& graphics);
+   void debugDraw(Graphics& graphics);
 
    boost::shared_ptr<Player> player_;
    boost::shared_ptr<FirstCaveBat> bat_;

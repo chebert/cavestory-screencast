@@ -1,0 +1,15 @@
+Episode 70 - Fixing Bounce Collisions/Cleanup
+=============================================
+
+Problem:
+ - Doritos fall through because of our collision check order
+
+Solution:
+ - Make sure to check the furthest collision out, rather than favoring
+   the tiles we are centered over/beside.
+
+Test:
+ - Many doritos! for test.
+
+Small Cleanup:
+ - Remove (comment out) our debug code until we decide what to do with it.

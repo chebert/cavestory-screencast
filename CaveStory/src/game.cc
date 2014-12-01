@@ -48,10 +48,12 @@ void Game::eventLoop() {
    damage_texts_.addDamageable(bat_);
    map_.reset(Map::createSlopeTestMap(graphics));
 
-   pickups_.add(boost::shared_ptr<Pickup>(new PowerDoritoPickup(
-               graphics,
-               bat_->center_x(), bat_->center_y(),
-               PowerDoritoPickup::MEDIUM)));
+   for (int i = 0; i < 10; ++i) {
+      pickups_.add(boost::shared_ptr<Pickup>(new PowerDoritoPickup(
+                  graphics,
+                  bat_->center_x(), bat_->center_y(),
+                  PowerDoritoPickup::MEDIUM)));
+   }
 
    bool running = true;
    units::MS last_update_time = SDL_GetTicks();
@@ -117,7 +119,11 @@ void Game::eventLoop() {
       update(std::min(elapsed_time, kMaxFrameTime), graphics);
       last_update_time = current_time_ms;
       */
-      if (input.isKeyHeld(SDLK_p) || input.wasKeyPressed(SDLK_n)) {
+      static bool should_play = true;
+      if (input.wasKeyPressed(SDLK_p)) {
+         should_play = !should_play;
+      }
+      if (should_play || input.wasKeyPressed(SDLK_n)) {
          MapCollidable::_debug_colliding_tiles.clear();
          MapCollidable::_debug_opposite_colliding_tiles.clear();
          update(1000 / kFps, graphics);
@@ -167,19 +173,7 @@ void Game::update(units::MS elapsed_time_ms, Graphics& graphics) {
    }
 }
 
-void Game::draw(Graphics& graphics) {
-   graphics.clear();
-
-   map_->drawBackground(graphics);
-   if (bat_)
-      bat_->draw(graphics);
-   entity_particle_system_.draw(graphics);
-   //pickups_.draw(graphics);
-   player_->draw(graphics);
-   map_->draw(graphics);
-   front_particle_system_.draw(graphics);
-
-   pickups_.draw(graphics);
+void Game::debugDraw(Graphics& graphics) {
    for (size_t i = 0; i < MapCollidable::_debug_colliding_tiles.size(); ++i) {
       Position2D position = MapCollidable::_debug_colliding_tiles[i].convert(units::tileToGame);
       Rectangle rect(position, Tile2D(1).convert(units::tileToGame));
@@ -190,6 +184,22 @@ void Game::draw(Graphics& graphics) {
       Rectangle rect(position, Tile2D(1).convert(units::tileToGame));
       graphics.drawRectOutline(rect, 4, 0, 255, 0);
    }
+   pickups_.draw(graphics);
+}
+
+void Game::draw(Graphics& graphics) {
+   graphics.clear();
+
+   map_->drawBackground(graphics);
+   if (bat_)
+      bat_->draw(graphics);
+   entity_particle_system_.draw(graphics);
+   pickups_.draw(graphics);
+   player_->draw(graphics);
+   map_->draw(graphics);
+   front_particle_system_.draw(graphics);
+
+   //debugDraw(graphics);
 
    damage_texts_.draw(graphics);
    player_->drawHUD(graphics);
