@@ -1,0 +1,17 @@
+Episode 71 - Upgrade to SDL2
+============================
+
+Benefits (for us):
+ - Using new SDL2 library (vs. 1.2) gives us:
+   - Scaling textures (for setting screen size)
+   - OpenGL rendering (uses the graphics card for extra perf.)
+   - Scancodes instead of keycodes (positional codes for the keyboard, keeps consistent for different layouts)
+
+What changes?:
+   - graphics:
+      - Window is a layer of abstraction over the screen
+         + replaces our SDL_Surface* screen
+      - Renderer is a layer of abstraction over SDL's process of drawing
+         + replaces our draw calls
+      - Texture is a layer of abstraction over SDL's surfaces, used by the renderer
+         + SDL_CreateTextureFromSurface

@@ -7,11 +7,13 @@
 #include "units.h"
 
 struct Rectangle;
-struct SDL_Surface;
+struct SDL_Texture;
+struct SDL_Window;
+struct SDL_Renderer;
 struct SDL_Rect;
 
 struct Graphics {
-   typedef SDL_Surface* SurfaceID;
+   typedef SDL_Texture* SurfaceID;
 
    Graphics();
    ~Graphics();
@@ -36,10 +38,11 @@ struct Graphics {
    void flip();
 
   private:
-   typedef std::map<std::string, SDL_Surface*> SpriteMap;
+   typedef std::map<std::string, SDL_Texture*> SpriteMap;
    SpriteMap sprite_sheets_;
 
-   SDL_Surface* screen_;
+   SDL_Window* window_;
+   SDL_Renderer* renderer_;
 };
 
 #endif // GRAPHICS_H_

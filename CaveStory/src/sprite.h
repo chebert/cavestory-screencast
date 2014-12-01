@@ -2,7 +2,7 @@
 #define SPRITE_H_
 
 #include <string>
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 #include "units.h"
 
@@ -21,7 +21,7 @@ struct Sprite {
    SDL_Rect source_rect_;
 
   private:
-   SDL_Surface* sprite_sheet_;
+   SDL_Texture* sprite_sheet_;
 };
 
 #endif // SPRITE_H_

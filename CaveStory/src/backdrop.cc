@@ -1,6 +1,6 @@
 #include "backdrop.h"
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 #include "game.h"
 

@@ -1,6 +1,6 @@
 #include "game.h"
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -63,7 +63,8 @@ void Game::eventLoop() {
       while (SDL_PollEvent(&event)) {
          switch (event.type) {
             case SDL_KEYDOWN:
-               input.keyDownEvent(event);
+               if (!event.key.repeat)
+                  input.keyDownEvent(event);
                break;
             case SDL_KEYUP:
                input.keyUpEvent(event);
@@ -73,43 +74,43 @@ void Game::eventLoop() {
          }
       }
 
-      if (input.wasKeyPressed(SDLK_ESCAPE)) {
+      if (input.wasKeyPressed(SDL_SCANCODE_ESCAPE)) {
          running = false;
       }
 
       // Player Horizontal Movement
       // if both left and right are being pressed
-      if (input.isKeyHeld(SDLK_LEFT) && input.isKeyHeld(SDLK_RIGHT)) {
+      if (input.isKeyHeld(SDL_SCANCODE_LEFT) && input.isKeyHeld(SDL_SCANCODE_RIGHT)) {
          player_->stopMoving();
-      } else if (input.isKeyHeld(SDLK_LEFT)) {
+      } else if (input.isKeyHeld(SDL_SCANCODE_LEFT)) {
          player_->startMovingLeft();
-      } else if (input.isKeyHeld(SDLK_RIGHT)) {
+      } else if (input.isKeyHeld(SDL_SCANCODE_RIGHT)) {
          player_->startMovingRight();
       } else {
          player_->stopMoving();
       }
 
-      if (input.isKeyHeld(SDLK_UP) && input.isKeyHeld(SDLK_DOWN)) {
+      if (input.isKeyHeld(SDL_SCANCODE_UP) && input.isKeyHeld(SDL_SCANCODE_DOWN)) {
          player_->lookHorizontal();
-      } else if (input.isKeyHeld(SDLK_UP)) {
+      } else if (input.isKeyHeld(SDL_SCANCODE_UP)) {
          player_->lookUp();
-      } else if (input.isKeyHeld(SDLK_DOWN)) {
+      } else if (input.isKeyHeld(SDL_SCANCODE_DOWN)) {
          player_->lookDown();
       } else {
          player_->lookHorizontal();
       }
 
       // Player Fire
-      if (input.wasKeyPressed(SDLK_x)) {
+      if (input.wasKeyPressed(SDL_SCANCODE_X)) {
          player_->startFire();
-      } else if (input.wasKeyReleased(SDLK_x)) {
+      } else if (input.wasKeyReleased(SDL_SCANCODE_X)) {
          player_->stopFire();
       }
 
       // Player Jump
-      if (input.wasKeyPressed(SDLK_z)) {
+      if (input.wasKeyPressed(SDL_SCANCODE_Z)) {
          player_->startJump();
-      } else if (input.wasKeyReleased(SDLK_z)) {
+      } else if (input.wasKeyReleased(SDL_SCANCODE_Z)) {
          player_->stopJump();
       }
 
@@ -120,10 +121,10 @@ void Game::eventLoop() {
       last_update_time = current_time_ms;
       */
       static bool should_play = true;
-      if (input.wasKeyPressed(SDLK_p)) {
+      if (input.wasKeyPressed(SDL_SCANCODE_P)) {
          should_play = !should_play;
       }
-      if (should_play || input.wasKeyPressed(SDLK_n)) {
+      if (should_play || input.wasKeyPressed(SDL_SCANCODE_N)) {
          MapCollidable::_debug_colliding_tiles.clear();
          MapCollidable::_debug_opposite_colliding_tiles.clear();
          update(1000 / kFps, graphics);
@@ -199,7 +200,7 @@ void Game::draw(Graphics& graphics) {
    map_->draw(graphics);
    front_particle_system_.draw(graphics);
 
-   //debugDraw(graphics);
+   debugDraw(graphics);
 
    damage_texts_.draw(graphics);
    player_->drawHUD(graphics);

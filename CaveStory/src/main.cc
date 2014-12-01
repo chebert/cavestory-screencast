@@ -1,4 +1,4 @@
-#include "SDL/SDL.h"
+#include "SDL.h"
 #include "game.h"
 
 int main(int, char**) {
